@@ -1,0 +1,142 @@
+[
+  {
+    "description": "most specific known (e.g. city instead of country, or hospital instead of city)",
+    "datatype": "wikibase-item",
+    "id": "P19",
+    "label": "place of birth",
+    "example": [
+      1048,
+      11105,
+      23685,
+      9726
+    ],
+    "types": [],
+    "aliases": [
+      "birthplace",
+      "born in",
+      "POB",
+      "birth place",
+      "location born",
+      "born at",
+      "birth location",
+      "location of birth",
+      "location",
+      "birth city"
+    ]
+  },
+  {
+    "description": "the most specific known (e.g. city instead of country, or hospital instead of city)",
+    "datatype": "wikibase-item",
+    "id": "P20",
+    "label": "place of death",
+    "example": [
+      9191,
+      4688112,
+      2002681,
+      1046049
+    ],
+    "types": [],
+    "aliases": [
+      "deathplace",
+      "died in",
+      "death place",
+      "POD",
+      "location of death",
+      "death location"
+    ]
+  },
+  {
+    "description": "date on which the subject was born",
+    "datatype": "time",
+    "id": "P569",
+    "label": "date of birth",
+    "example": [
+      4911143,
+      7315
+    ],
+    "types": [
+      "orderable Wikidata property"
+    ],
+    "aliases": [
+      "born on",
+      "birth date",
+      "birthday",
+      "birthdate",
+      "birth year",
+      "year of birth",
+      "birthyear",
+      "DOB"
+    ]
+  },
+  {
+    "description": "occupation of a person; see also \"field of work\" (Property:P101), \"position held\" (Property:P39)",
+    "datatype": "wikibase-item",
+    "id": "P106",
+    "label": "occupation",
+    "example": [
+      42037,
+      83338,
+      7327,
+      42402
+    ],
+    "types": [
+      "for items about people"
+    ],
+    "aliases": [
+      "profession",
+      "job",
+      "work",
+      "career",
+      "employment",
+      "craft"
+    ]
+  },
+  {
+    "description": "male parent",
+    "datatype": "wikibase-item",
+    "id": "P22",
+    "label": "father",
+    "example": [
+      41142,
+      207206,
+      1149,
+      121973,
+      22348311,
+      36949
+    ],
+    "types": [],
+    "aliases": [
+      "dad",
+      "has father",
+      "man, the parent of that person",
+      "parent",
+      "daddy",
+      "papa",
+      "is son of",
+      "is child of",
+      "is daughter of"
+    ]
+  },
+  {
+    "description": "female parent",
+    "datatype": "wikibase-item",
+    "id": "P25",
+    "label": "mother",
+    "example": [
+      43274,
+      302,
+      40901
+    ],
+    "types": [],
+    "aliases": [
+      "mum",
+      "mom",
+      "mam",
+      "has mother",
+      "parent",
+      "is son of",
+      "is daughter of",
+      "is child of"
+    ]
+  }
+]

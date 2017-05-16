@@ -87,3 +87,11 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# IntelliJ
+.idea
+
+# Project-dependent
+apicache
+throttle.ctrl
+user-config.py
