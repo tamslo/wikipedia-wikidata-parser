@@ -3,22 +3,28 @@ import json
 import spacy
 from spacy.attrs import LEMMA
 from spacy.matcher import Matcher
+from pycorenlp import StanfordCoreNLP
 import wikipedia
 
 
 class WikipediaWikidataParser:
-    def __init__(self):
-        self.nlp = spacy.load('en')
+    def __init__(self, core_nlp_host='localhost', core_nlp_port=9000):
+        self.nlp = StanfordCoreNLP('http://{}:{}'.format(core_nlp_host,
+                                                         core_nlp_port))
 
     def run(self):
         # Get wikipedia article
         wp_article = self._get_wp_article()
         content = re.sub(r"={2,}.*={2,}", "", wp_article.content)
         content = content.replace('\n', ' ').replace('\r', '')
-        wp_doc = self.nlp(content)
 
         # Get properties
         wd_properties = self._get_wd_properties()
+
+        output = self.nlp.annotate(content, properties={
+            'annotators': 'lemma',
+            'outputFormat': 'json'
+        })
 
         # Tokenize property labels and aliases
         lemmatized_properties = {}
@@ -27,7 +33,7 @@ class WikipediaWikidataParser:
             lemmatized_properties[id] = lemmas
 
         # Match properties
-        matcher = Matcher(self.nlp.vocab)
+        """matcher = Matcher(self.nlp.vocab)
         for property_id, labels in lemmatized_properties.items():
             for lemmas in labels:
                 matcher.add_pattern(property_id, [{LEMMA: lemma} for lemma in lemmas], label=property_id)
@@ -37,7 +43,7 @@ class WikipediaWikidataParser:
                     print('Property P{} ({}) recognized:'.format(label, wd_properties[label]['label']))
                     print(sentence)
                     print()
-                    break
+                    break"""
 
     @staticmethod
     def _get_wp_article():
