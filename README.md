@@ -4,7 +4,7 @@ A parser that converts text in Wikipedia to statements in Wikidata.
 ## Installation
 Download and extract Stanford CoreNLP from  https://stanfordnlp.github.io/CoreNLP/#download.
 
-Install dependencies `pip install -r requirements.txt`.
+Install dependencies `pip install -r requirements.txt` and spacy assets `python -m spacy download en`.
 
 ## Execution
 Go to the Stanford CoreNLP directory and run `java -mx5g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -timeout 10000`, increase the timeout if needed.
@@ -22,7 +22,7 @@ Run `python app.py`.
 ### Tools
 To access a Wikipedia article, we use the Wikipedia Python package with the addition that it returns the page properties, including the identifer of the related Wikidata item ([see Sören's pull request](https://github.com/goldsmith/Wikipedia/pull/147)).
 
-To perform NLP tasks on the article, we use the [Stanford CoreNLP Toolkit](https://stanfordnlp.github.io/CoreNLP/).
+To perform NLP tasks on the article, we use the [Stanford CoreNLP Toolkit](https://stanfordnlp.github.io/CoreNLP/) and [Spacy](https://spacy.io/).
 
 ### Test Data
 To prove our concept, we started to parse only one Wikipedia article. We chose [Douglas Adams](https://en.wikipedia.org/wiki/Douglas_Adams) (by the way, check his identifer on Wikidata) because we assumed that an article about a person holds information which is well parsable.
