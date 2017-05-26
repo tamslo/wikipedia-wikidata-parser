@@ -92,6 +92,7 @@ ENV/
 
 # IntelliJ
 .idea
+*.iml
 
 # Project-dependent
 apicache
