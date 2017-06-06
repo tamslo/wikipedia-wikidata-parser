@@ -1,4 +1,3 @@
 git+https://github.com/soldag/Wikipedia.git
 pywikibot==3.0.20170521
-spacy==1.8.2
 pycorenlp==0.3.0

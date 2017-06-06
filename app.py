@@ -1,17 +1,18 @@
-import json
-import spacy
 import wikipedia
 from pycorenlp import StanfordCoreNLP
 
 from clients.wikipedia import WikipediaClient
 from clients.wikidata import WikidataClient
-from analysis.statement_detector import StatementDetector
+from analysis.property_profiler import PropertyProfiler
+from analysis.property_value_extractor import PropertyValueExtractor
+from nlp.syntactical_parser import SyntacticalParser
+from nlp.semgrex_matcher import SemgrexMatcher, SemgrexParseException
+from nlp.sentence_splitter import SentenceSplitter
 
 
 class WikipediaWikidataParser:
     def __init__(self, core_nlp_host='localhost', core_nlp_port=9000):
-        # Initialize NLP libraries
-        self.spacy = spacy.load('en')
+        # Initialize CoreNLP client
         self.core_nlp = StanfordCoreNLP('http://{}:{}'.format(core_nlp_host,
                                                               core_nlp_port))
 
@@ -20,23 +21,37 @@ class WikipediaWikidataParser:
         self.wd_client = WikidataClient('data/wd_properties_sample.json')
 
         # Load static resources
-        self.wd_properties = self.wd_client.get_properties_dict(numeric_id=True)
+        self.wd_properties = self.wd_client.get_properties()
 
         # Initialize services
-        self.statement_detector = StatementDetector(self.spacy,
-                                                    self.wd_properties)
+        self.syntactical_parser = SyntacticalParser(self.core_nlp)
+        self.semgrex_matcher = SemgrexMatcher(self.core_nlp)
+        self.sentence_splitter = SentenceSplitter(self.core_nlp)
+        self.property_profiler = PropertyProfiler(self.syntactical_parser)
+        self.property_value_extractor = PropertyValueExtractor(self.semgrex_matcher)
+
+        # Generate property profiles
+        self.property_profiles = self.property_profiler.run(self.wd_properties)
 
     def run(self):
         # Get wikipedia article
         wp_article = self._get_wp_article()
 
-        # Find statements for properties in wikipedia article
-        for statement_match in self.statement_detector.run(wp_article):
-            print('Property P{} ({}) recognized:'.format(statement_match.wd_property.id,
-                                                         statement_match.wd_property.label))
-            print(statement_match.sentence)
-            self.extract_statements(statement_match)
-            print()
+        # Split text into sentences to evaluate property matchers on each
+        # sentence separately to prevent CoreNLP timeouts to occur
+        wp_sentences = self.sentence_splitter.run(wp_article.sanitized_content)
+
+        # Apply property patterns on text
+        for property_profile in self.property_profiles:
+            print('Apply patterns of property {} ({})'.format(property_profile.property_info.id, property_profile.property_info.label))
+            for pattern in property_profile.patterns:
+                for sentence in wp_sentences:
+                    try:
+                        matches = self.semgrex_matcher.run(sentence, pattern)
+                        for match in matches:
+                            print('Match found: {}'.format(match.text))
+                    except SemgrexParseException as e:
+                        print(e)
 
     def _get_wp_article(self):
         while True:
@@ -48,28 +63,6 @@ class WikipediaWikidataParser:
                 print('{} may refer to:'.format(title))
                 for option in e.options:
                     print(option)
-
-    def extract_statements(self, statement_match):
-        annotated_sentence = self.core_nlp.annotate(statement_match.sentence, properties={
-            'annotators': 'pos,depparse,ner',
-            'outputFormat': 'json'
-        })
-        # Debugging
-        log = open('debug_log.json', 'w')
-        log.write(json.dumps(annotated_sentence))
-        for index in range(statement_match.start, statement_match.end):
-            tokens = annotated_sentence['sentences'][0]['tokens']
-            basic_dependencies = annotated_sentence['sentences'][0]['basicDependencies']
-            matching_dependencies = [dependency for dependency in basic_dependencies
-                                    if dependency['governor'] == index + 1 or
-                                    dependency['dependent'] == index +1]
-            print(tokens[index]['word'])
-            print(matching_dependencies)
-
-
-# Debugging
-# log = open('debug_log.json', 'w')
-# log.write(json.dumps(lemmatized_properties))
 
 if __name__ == '__main__':
     app = WikipediaWikidataParser()

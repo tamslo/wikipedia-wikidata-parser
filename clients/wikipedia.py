@@ -1,5 +1,6 @@
 import re
 import wikipedia
+from unidecode import unidecode
 
 
 class WikipediaClient:
@@ -7,12 +8,14 @@ class WikipediaClient:
         # Get wikipedia page from API
         page = wikipedia.page(title)
 
-        # Sanitize content
+        # Sanitize content: Remove headline formattings, newlines,
+        # double-spaces, transliteration to ASCII
         sanitized_content = re \
             .sub(r'={2,}.*={2,}', '', page.content) \
             .replace('\n', ' ') \
             .replace('\r', ' ') \
             .replace('  ', ' ')
+        sanitized_content = unidecode(sanitized_content)
 
         # Get referenced wikidata item
         wd_item = page.pageprops['wikibase_item']
