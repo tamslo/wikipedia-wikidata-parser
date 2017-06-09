@@ -54,7 +54,7 @@ class PropertyProfiler:
 
     def _build_noun_pattern(self, value_node, parse_tree):
         dep_pattern = self._build_dep_pattern(parse_tree.root, parse_tree)
-        return '{} >nsubj ({})'.format(value_node, dep_pattern)
+        return '{0} [>nsubj ({1})|<appos ({1})]'.format(value_node, dep_pattern)
 
     def _build_verb_pattern(self, value_node, parse_tree):
         # Check root node has any dependency to prepositions, which can be
