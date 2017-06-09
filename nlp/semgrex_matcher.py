@@ -29,22 +29,22 @@ class SemgrexParseException(Exception):
 
 
 class SemgrexMatch:
-    def __init__(self, text, start_offset, end_offset):
+    def __init__(self, text, start_index, end_index):
         self._text = text
-        self._start_offset = start_offset
-        self._end_offset = end_offset
+        self._start_index = start_index
+        self._end_index = end_index
 
     @property
     def text(self):
         return self._text
 
     @property
-    def start_offset(self):
-        return self._start_offset
+    def start_index(self):
+        return self._start_index
 
     @property
-    def end_offset(self):
-        return self._end_offset
+    def end_index(self):
+        return self._end_index
 
     @staticmethod
     def from_json(obj):
