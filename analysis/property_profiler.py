@@ -2,27 +2,42 @@ from utils.helpers import first
 
 
 class PropertyProfiler:
+    DATA_TYPE_POS_MAPPING = {
+        'wikibase-item': ['NN.*'],
+        'quantity': ['CD'],
+        'time': ['CD', 'NNP']
+    }
+
     def __init__(self, syntactical_parser):
         self._syntactical_parser = syntactical_parser
 
     def run(self, properties):
         profiles = []
         for prop in properties:
-            patterns = [self._build_pattern(label) for label in prop.label_aliases]
+            patterns = [self._build_pattern(prop, label) for label in prop.label_aliases]
             patterns = [pattern for pattern in patterns if pattern is not None]
             profiles.append(PropertyProfile(prop, patterns))
 
         return profiles
 
-    def _build_pattern(self, text):
+    def _build_pattern(self, prop, text):
         # Build syntactical parse tree with lemmas, POS tags and dependencies
         parse_tree = self._syntactical_parser.parse(text, dependency_type='enhanced++')[0]
 
+        # Ignore malformed labels for that a pattern cannot be created properly
+        if self.is_malformed_label(parse_tree):
+            return None
+
         # Build pattern depending type of label phrase
+        value_node = self._build_value_node(prop)
         if self._is_verbal_label_phrase(parse_tree):
-            return self._build_verb_pattern(parse_tree)
+            return self._build_verb_pattern(value_node, parse_tree)
         if self._is_noun_label_phrase(parse_tree):
-            return self._build_noun_pattern(parse_tree)
+            return self._build_noun_pattern(value_node, parse_tree)
+
+    @staticmethod
+    def is_malformed_label(parse_tree):
+        return any(dep.dep == 'punct' for dep in parse_tree.dependencies)
 
     @staticmethod
     def _is_noun_label_phrase(parse_tree):
@@ -37,11 +52,11 @@ class PropertyProfiler:
                any(dep.dep == 'cop' and dep.dependent.pos.startswith('VB')
                    for dep in parse_tree.root.dependencies('governor'))
 
-    def _build_noun_pattern(self, parse_tree):
+    def _build_noun_pattern(self, value_node, parse_tree):
         dep_pattern = self._build_dep_pattern(parse_tree.root, parse_tree)
-        return '{{}} >nsubj ({})'.format(dep_pattern)
+        return '{} >nsubj ({})'.format(value_node, dep_pattern)
 
-    def _build_verb_pattern(self, parse_tree):
+    def _build_verb_pattern(self, value_node, parse_tree):
         # Check root node has any dependency to prepositions, which can be
         # included into relation name
         relation_name = 'nmod'
@@ -58,14 +73,14 @@ class PropertyProfiler:
         dep_pattern = self._build_dep_pattern(parse_tree.root,
                                               parse_tree, ['IN'])
 
-        return '{{}} {} ({})'.format(relation_pattern, dep_pattern)
+        return '{} {} ({})'.format(value_node, relation_pattern, dep_pattern)
 
     def _build_dep_pattern(self, token, parse_tree, exclude_pos=None):
         # Set default value for exclude_pos
         exclude_pos = exclude_pos or []
 
         # Build pattern matching the lemma of the current node
-        gov_pattern = self._node_pattern(token)
+        gov_pattern = self._lemma_pattern(token)
 
         # Get first dependency of current node and build pattern for relation.
         # Further dependencies are ignored so far.
@@ -80,15 +95,25 @@ class PropertyProfiler:
             dep_pattern = self._build_dep_pattern(dependency.dependent,
                                                   parse_tree)
         else:
-            dep_pattern = self._node_pattern(dependency.dependent)
+            dep_pattern = self._lemma_pattern(dependency.dependent)
 
         # Construct dependency pattern
         relation_pattern = self._relation_pattern(dependency.dep)
         return '{} {} ({})'.format(gov_pattern, relation_pattern, dep_pattern)
 
+    def _build_value_node(self, prop):
+        return self._pos_pattern(self.DATA_TYPE_POS_MAPPING[prop.data_type])
+
     @staticmethod
-    def _node_pattern(token):
+    def _lemma_pattern(token):
         return '{{lemma: {}}}'.format(token.lemma)
+
+    @staticmethod
+    def _pos_pattern(tags):
+        if isinstance(tags, str):
+            tags = [tags]
+
+        return '{{tag: /{}/}}'.format('|'.join(tags))
 
     @staticmethod
     def _relation_pattern(name, direction='>'):

@@ -69,6 +69,29 @@
     ]
   },
   {
+    "description": "date on which the subject died",
+    "datatype": "time",
+    "id": "P570",
+    "label": "date of death",
+    "example": [
+      553155,
+      1526,
+      7315
+    ],
+    "types": [],
+    "aliases": [
+      "date of the end",
+      "death date",
+      "died on",
+      "died in",
+      "DOD",
+      "year of death",
+      "dead",
+      "deathdate",
+      "death"
+    ]
+  },
+  {
     "description": "occupation of a person; see also \"field of work\" (Property:P101), \"position held\" (Property:P39)",
     "datatype": "wikibase-item",
     "id": "P106",

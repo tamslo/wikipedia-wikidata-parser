@@ -49,9 +49,10 @@ class WikipediaWikidataParser:
                     try:
                         matches = self.semgrex_matcher.run(sentence, pattern)
                         for match in matches:
-                            print('Match found: {}'.format(match.text))
+                            print('Match found: "{}" in "{}"'.format(match.text, sentence.strip()))
                     except SemgrexParseException as e:
                         print(e)
+            print()
 
     def _get_wp_article(self):
         while True:

@@ -8,9 +8,12 @@ class SemgrexMatcher:
         result = self._core_nlp.semgrex(text, pattern=pattern, filter=filter)
 
         # Catch errors
-        if isinstance(result, str) and result.startswith(self.PARSE_ERROR_EXCEPTION_LABEL):
-            message = result.replace(self.PARSE_ERROR_EXCEPTION_LABEL, '')
-            raise SemgrexParseException(message)
+        if isinstance(result, str):
+            if result.startswith(self.PARSE_ERROR_EXCEPTION_LABEL):
+                message = result.replace(self.PARSE_ERROR_EXCEPTION_LABEL, '')
+                raise SemgrexParseException(message)
+            else:
+                raise Exception(result)
 
         # Parse matches
         matches = [SemgrexMatch.from_json(match)
