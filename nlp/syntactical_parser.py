@@ -10,7 +10,7 @@ class SyntacticalParser:
         if ner:
             annotators += ',ner'
 
-        annotations = self._core_nlp.annotate(text, properties={
+        annotations = self._core_nlp.http_client.annotate(text, properties={
             'annotators': annotators,
             'outputFormat': 'json'
         })['sentences']

@@ -1,21 +1,19 @@
+import sys
 import wikipedia
-from pycorenlp import StanfordCoreNLP
 
 from clients.wikipedia import WikipediaClient
 from clients.wikidata import WikidataClient
 from analysis.property_profiler import PropertyProfiler
 from analysis.statement_builder import StatementBuilder
+from nlp.corenlp_client import CoreNlpClient
 from nlp.syntactical_parser import SyntacticalParser
 from nlp.semgrex_matcher import SemgrexMatcher, SemgrexParseException
 from nlp.sentence_splitter import SentenceSplitter
+from nlp.coreference_analyzer import CoreferenceAnalyzer
 
 
 class WikipediaWikidataParser:
-    def __init__(self, core_nlp_host='localhost', core_nlp_port=9000):
-        # Initialize CoreNLP client
-        self.core_nlp = StanfordCoreNLP('http://{}:{}'.format(core_nlp_host,
-                                                              core_nlp_port))
-
+    def __init__(self, core_nlp):
         # Initialize API clients
         self.wp_client = WikipediaClient()
         self.wd_client = WikidataClient('data/wd_properties_sample.json')
@@ -24,9 +22,10 @@ class WikipediaWikidataParser:
         self.wd_properties = self.wd_client.get_properties()
 
         # Initialize services
-        self.syntactical_parser = SyntacticalParser(self.core_nlp)
-        self.semgrex_matcher = SemgrexMatcher(self.core_nlp)
-        self.sentence_splitter = SentenceSplitter(self.core_nlp)
+        self.syntactical_parser = SyntacticalParser(core_nlp)
+        self.semgrex_matcher = SemgrexMatcher(core_nlp)
+        self.coreference_analyzer = CoreferenceAnalyzer(core_nlp)
+        self.sentence_splitter = SentenceSplitter(core_nlp)
         self.property_profiler = PropertyProfiler(self.syntactical_parser)
         self.statement_builder = StatementBuilder(self.syntactical_parser)
 
@@ -36,6 +35,9 @@ class WikipediaWikidataParser:
     def run(self):
         # Get wikipedia article
         wp_article = self._get_wp_article()
+
+        # Get coreferences of the entire article
+        coreferences = self.coreference_analyzer.run(wp_article.sanitized_content)
 
         # Split text into sentences to evaluate property matches on each
         # sentence separately to prevent CoreNLP timeouts to occur
@@ -78,5 +80,19 @@ class WikipediaWikidataParser:
         return statements
 
 if __name__ == '__main__':
-    app = WikipediaWikidataParser()
-    app.run()
+    # Read arguments
+    if len(sys.argv) <= 1:
+        print('Usage: python app.py [CORE_NLP_DIR]')
+    core_nlp_dir = sys.argv[1]
+
+    # Initialize CoreNLP client
+    core_nlp = CoreNlpClient(core_nlp_dir)
+    core_nlp.start()
+
+    # Run app
+    try:
+        app = WikipediaWikidataParser(core_nlp)
+        app.run()
+    finally:
+        print("Shutting down CoreNLP...")
+        core_nlp.stop()

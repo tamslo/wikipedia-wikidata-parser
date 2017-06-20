@@ -2,22 +2,20 @@
 A parser that converts text in Wikipedia to statements in Wikidata.
 
 ## Installation
-Download and extract Stanford CoreNLP from  https://stanfordnlp.github.io/CoreNLP/#download.
+Download and extract Stanford CoreNLP from https://stanfordnlp.github.io/CoreNLP/#download.
 
-Install dependencies `pip install -r requirements.txt` and spacy assets `python -m spacy download en`.
+Install dependencies `pip install -r requirements.txt`.
 
 ## Execution
-Go to the Stanford CoreNLP directory and run `java -mx5g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -timeout 10000`, increase the timeout if needed.
-
-Run `python app.py`.
+Run `python app.py [CORE_NLP_DIR]`, where `CORE_NLP_DIR` is the installation dir of CoreNLP.
 
 ## Documentation
 
 ### Algorithm (WIP)
-1. Lemmatization of article and properties
-2. Match lemmas, extract regarding sentence
-3. Syntactically parse sentence
-4. Build statements from that
+1. Generate semgrex patterns for each property and label/alias 
+2. Apply patterns on article text sentence-wise
+3. Validate extracted information and reject invalid candidates
+4. Build statements from valid candidates
 
 ### Tools
 To access a Wikipedia article, we use the Wikipedia Python package with the addition that it returns the page properties, including the identifer of the related Wikidata item ([see Sören's pull request](https://github.com/goldsmith/Wikipedia/pull/147)).

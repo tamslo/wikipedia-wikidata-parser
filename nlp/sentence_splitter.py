@@ -3,7 +3,7 @@ class SentenceSplitter:
         self._core_nlp = core_nlp
 
     def run(self, text):
-        annotations = self._core_nlp.annotate(text, properties={
+        annotations = self._core_nlp.http_client.annotate(text, properties={
             'annotators': 'ssplit',
             'outputFormat': 'json'
         })['sentences']
