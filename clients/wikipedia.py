@@ -20,14 +20,20 @@ class WikipediaClient:
         # Get referenced wikidata item
         wd_item = page.pageprops['wikibase_item']
 
-        return WikipediaArticle(page.content, sanitized_content, wd_item)
+        return WikipediaArticle(page.title, page.content,
+                                sanitized_content, wd_item)
 
 
 class WikipediaArticle:
-    def __init__(self, content, sanitized_content, wd_item):
+    def __init__(self, title, content, sanitized_content, wd_item):
+        self._title = title
         self._content = content
         self._sanitized_content = sanitized_content
         self._wd_item = wd_item
+
+    @property
+    def title(self):
+        return self._title
 
     @property
     def content(self):

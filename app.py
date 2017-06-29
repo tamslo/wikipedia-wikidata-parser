@@ -30,18 +30,26 @@ class WikipediaWikidataParser:
         self.statement_builder = StatementBuilder(self.syntactical_parser)
 
         # Generate property profiles
+        print("Building property patterns...")
         self.property_profiles = self.property_profiler.run(self.wd_properties)
 
     def run(self):
         # Get wikipedia article
         wp_article = self._get_wp_article()
 
-        # Get coreferences of the entire article
-        coreferences = self.coreference_analyzer.run(wp_article.sanitized_content)
-
         # Split text into sentences to evaluate property matches on each
         # sentence separately to prevent CoreNLP timeouts to occur
         wp_sentences = self.sentence_splitter.run(wp_article.sanitized_content)
+
+        # Get co-references of the entire article
+        print("Analyzing co-references...")
+        corefs = self.coreference_analyzer.run(wp_article.sanitized_content)
+        entity_mentions = self._get_entity_mentions(corefs, wp_article.title)
+
+        # Filter sentences to include only those, in which the entity of
+        # the article is mentioned
+        sentence_indices = set(mention.sentence_index for mention in entity_mentions)
+        wp_sentences = [wp_sentences[index] for index in sentence_indices]
 
         # Apply property patterns on text
         for property_profile in self.property_profiles:
@@ -65,6 +73,14 @@ class WikipediaWikidataParser:
                 for option in e.options:
                     print(option)
 
+    @staticmethod
+    def _get_entity_mentions(corefs, entity):
+        corefs = [coref
+                  for coref in corefs
+                  if any(mention.text in entity or entity in mention.text
+                               for mention in coref.mentions)]
+        return [mention for coref in corefs for mention in coref.mentions]
+
     def _extract_statements(self, sentence, property_info, pattern):
         statements = []
         try:
@@ -74,7 +90,7 @@ class WikipediaWikidataParser:
                                                        sentence)
                 statements.append(statement)
                 print('Match found: "{}" in "{}"'.format(statement.value, sentence.strip()))
-        except SemgrexParseException as e:
+        except (TimeoutError, SemgrexParseException) as e:
             print(e)
 
         return statements
@@ -86,6 +102,7 @@ if __name__ == '__main__':
     core_nlp_dir = sys.argv[1]
 
     # Initialize CoreNLP client
+    print("Starting CoreNLP...")
     core_nlp = CoreNlpClient(core_nlp_dir)
     core_nlp.start()
 

@@ -15,7 +15,7 @@ class CoreferenceAnalyzer:
 
             # Run CoreNLP as subprocess
             self._core_nlp.run_cmd({
-                'annotators': 'tokenize,ssplit,pos,lemma,ner,depparse,mention,coref',
+                'annotators': 'tokenize,ssplit,pos,lemma,ner,depparse,parse,mention,coref',
                 'coref.algorithm': algorithm,
                 'file': text_file.name,
                 'outputFormat': 'json'
@@ -68,7 +68,7 @@ class Mention:
 
     @staticmethod
     def from_json(obj):
-        return Mention(obj['sentNum'],
-                           obj['startIndex'],
-                           obj['endIndex'],
-                           obj['text'])
+        return Mention(obj['sentNum'] - 1,
+                       obj['startIndex'] - 1,
+                       obj['endIndex'] - 1,
+                       obj['text'])
