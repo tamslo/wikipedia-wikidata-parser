@@ -1,5 +1,6 @@
 class SemgrexMatcher:
     PARSE_ERROR_EXCEPTION_LABEL = 'edu.stanford.nlp.semgraph.semgrex.SemgrexParseException: '
+    TIMEOUT_ERROR_RESULT_LABEL = 'Timeout'
 
     def __init__(self, core_nlp):
         self._core_nlp = core_nlp
@@ -12,6 +13,8 @@ class SemgrexMatcher:
             if result.startswith(self.PARSE_ERROR_EXCEPTION_LABEL):
                 message = result.replace(self.PARSE_ERROR_EXCEPTION_LABEL, '')
                 raise SemgrexParseException(message)
+            elif result.startswith(self.TIMEOUT_ERROR_RESULT_LABEL):
+                raise TimeoutError(result)
             else:
                 raise Exception(result)
 
