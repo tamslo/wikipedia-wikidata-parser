@@ -46,6 +46,9 @@ class SemgrexMatch:
     def end_index(self):
         return self._end_index
 
+    def __str__(self):
+        return self.text
+
     @staticmethod
     def from_json(obj):
         return SemgrexMatch(obj['text'],

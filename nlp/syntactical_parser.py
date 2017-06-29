@@ -113,6 +113,9 @@ class Token:
                role == 'dependent' and is_dependent:
                 yield dependency
 
+    def __str__(self):
+        return self.original_text
+
     @staticmethod
     def from_json(tree, obj):
         ner = None
@@ -146,6 +149,9 @@ class Dependency:
     @property
     def dep(self):
         return self._dep
+
+    def __str__(self):
+        return self.dep
 
     @staticmethod
     def from_json(tree, obj):

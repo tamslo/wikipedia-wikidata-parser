@@ -37,6 +37,10 @@ class Coreference:
     def mentions(self):
         return self._mentions
 
+    def __str__(self):
+        if self.mentions:
+            return str(self.mentions[0])
+
     @staticmethod
     def from_json(arr):
         mentions = [Mention.from_json(obj) for obj in arr]
@@ -65,6 +69,9 @@ class Mention:
     @property
     def text(self):
         return self._text
+
+    def __str__(self):
+        return self.text
 
     @staticmethod
     def from_json(obj):
