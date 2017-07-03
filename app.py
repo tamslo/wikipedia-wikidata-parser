@@ -40,24 +40,18 @@ class WikipediaWikidataParser:
 
         # Filter sentences to include only those, in which the entity of
         # the article is mentioned
-        coref_sentence_indices = set(mention.sentence_index for mention in entity_mentions)
+        coref_sentences = set(mention.sentence for mention in entity_mentions)
 
         # Apply property patterns on text
         for property_profile in self.property_profiles:
             property_info = property_profile.property_info
             print('Apply patterns of property {} ({})'.format(property_info.id, property_profile.property_info.label))
-            for raw_pattern in property_profile.patterns:
-                for i in coref_sentence_indices:
-                    # Get indices of subject from corefs
-                    subject_indices = [mention.start_index
-                                       for mention in entity_mentions
-                                       if mention.sentence_index == i]
-                    compiled_pattern = raw_pattern.build(subject_indices)
-
+            for pattern in property_profile.patterns:
+                for sentence in coref_sentences:
                     # Get statements
-                    statements = self._extract_statements(parse_result.sentences[i],
+                    statements = self._extract_statements(sentence,
                                                           property_info,
-                                                          compiled_pattern)
+                                                          pattern)
             print()
 
     def _get_wp_article(self):
@@ -74,10 +68,9 @@ class WikipediaWikidataParser:
     def _extract_statements(self, sentence, property_info, pattern):
         statements = []
         try:
-            matches = self.semgrex_matcher.run(sentence.text, pattern)
+            matches = self.semgrex_matcher.run(sentence, pattern)
             for match in matches:
-                statement = self.statement_builder.run(property_info, match,
-                                                       sentence)
+                statement = self.statement_builder.run(property_info, match)
                 statements.append(statement)
                 print('Match found: "{}" in "{}"'.format(statement.value,
                                                          sentence.text))

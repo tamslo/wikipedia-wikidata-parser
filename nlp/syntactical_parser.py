@@ -37,7 +37,7 @@ class SyntacticParsingResult:
     def from_json(obj, document, dependency_type):
         sentences = [Sentence.from_json(sentence, document, dependency_type)
                        for sentence in obj['sentences']]
-        coreferences = CoreferenceCollection.from_json(obj['corefs'])
+        coreferences = CoreferenceCollection.from_json(obj['corefs'], sentences)
 
         return SyntacticParsingResult(sentences, coreferences)
 
@@ -54,6 +54,9 @@ class Sentence:
     @property
     def parse_tree(self):
         return self._parse_tree
+
+    def __str__(self):
+        return self.text
 
     @staticmethod
     def from_json(obj, document, dependency_type):
@@ -223,8 +226,8 @@ class CoreferenceCollection:
         return '[{}]'.format(', '.join(self._coreferences))
 
     @staticmethod
-    def from_json(obj):
-        return CoreferenceCollection([Coreference.from_json(x)
+    def from_json(obj, sentences):
+        return CoreferenceCollection([Coreference.from_json(x, sentences)
                                       for x in obj.values()])
 
 
@@ -241,40 +244,41 @@ class Coreference:
             return str(self.mentions[0])
 
     @staticmethod
-    def from_json(arr):
-        mentions = [Mention.from_json(obj) for obj in arr]
+    def from_json(arr, sentences):
+        mentions = [Mention.from_json(obj, sentences) for obj in arr]
         return Coreference(mentions)
 
 
 class Mention:
-    def __init__(self, sentence_index, start_index, end_index, text):
-        self._sentence_index = sentence_index
-        self._start_index = start_index
-        self._end_index = end_index
-        self._text = text
+    def __init__(self, sentence, tokens):
+        self._sentence = sentence
+        self._tokens = tokens
 
     @property
-    def sentence_index(self):
-        return self._sentence_index
+    def sentence(self):
+        return self._sentence
 
     @property
-    def start_index(self):
-        return self._start_index
-
-    @property
-    def end_index(self):
-        return self._end_index
+    def tokens(self):
+        return self._tokens
 
     @property
     def text(self):
-        return self._text
+        return ' '.join([token.original_text for token in self.tokens])
 
     def __str__(self):
         return self.text
 
     @staticmethod
-    def from_json(obj):
-        return Mention(obj['sentNum'] - 1,
-                       obj['startIndex'] - 1,
-                       obj['endIndex'] - 1,
-                       obj['text'])
+    def from_json(obj, sentences):
+        # Extract properties from json object
+        start_index = obj['startIndex'] - 1
+        end_index = obj['endIndex'] - 1
+        sentence_index = obj['sentNum'] - 1
+
+        # Get sentence and tokens of mention
+        sentence = sentences[sentence_index]
+        tokens = [token for token in sentence.parse_tree.tokens
+                  if start_index <= token.index < end_index]
+
+        return Mention(sentence, tokens)

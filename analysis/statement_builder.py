@@ -1,16 +1,13 @@
 class StatementBuilder:
     @staticmethod
-    def run(property_info, match, sentence):
-        # Find token of match in syntactical parse tree
-        token = sentence.parse_tree.tokens[match.start_index]
-
+    def run(property_info, match):
         # Follow compound dependencies
         compounds = [dep.dependent
-                     for dep in token.dependencies(role='governor')
+                     for dep in match.tokens[0].dependencies(role='governor')
                      if dep.dep == 'compound']
 
         # Build value string
-        value_tokens = sorted([token] + compounds, key=lambda x: x.index)
+        value_tokens = sorted([match.tokens[0]] + compounds, key=lambda x: x.index)
         value = ' '.join(token.word for token in value_tokens)
 
         return Statement(property_info, value)

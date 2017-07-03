@@ -55,7 +55,8 @@ class PropertyProfiler:
 
     def _build_noun_pattern(self, value_node, parse_tree):
         dep_pattern = self._build_dep_pattern(parse_tree.root, parse_tree)
-        return ValuePattern(['>/nmod:poss/'], value_node, ['>nsubj', '<appos'], dep_pattern)
+        return self._compile_pattern(['>/nmod:poss/'], value_node,
+                                     ['>nsubj', '<appos'], dep_pattern)
 
     def _build_verb_pattern(self, value_node, parse_tree):
         # Check root node has any dependency to prepositions, which can be
@@ -74,7 +75,8 @@ class PropertyProfiler:
         dep_pattern = self._build_dep_pattern(parse_tree.root,
                                               parse_tree, ['IN'])
 
-        return ValuePattern(['>nsubj', '>nsubjpass'], value_node, [relation_pattern], dep_pattern)
+        return self._compile_pattern(['>nsubj', '>nsubjpass'], value_node,
+                                     [relation_pattern], dep_pattern)
 
     def _build_dep_pattern(self, token, parse_tree, exclude_pos=None):
         # Set default value for exclude_pos
@@ -106,6 +108,22 @@ class PropertyProfiler:
         return self._pos_pattern(self.DATA_TYPE_POS_MAPPING[prop.data_type])
 
     @staticmethod
+    def _compile_pattern(subject_relations, value_node,
+                         label_root_relations, label_pattern):
+        # Build subpattern matching subject of sentence
+        subject_relation_patterns = ['{} {{}}=subject'.format(relation)
+                                     for relation in subject_relations]
+        subject_pattern = '[{}]'.format('|'.join(subject_relation_patterns))
+
+        # Build subpattern matching label of corresponding property
+        label_relation_patterns = ['{} ({} {})'.format(relation, label_pattern,
+                                                       subject_pattern)
+                                   for relation in label_root_relations]
+        relation_pattern = '[{}]'.format('|'.join(label_relation_patterns))
+
+        return '{}=value {}'.format(value_node, relation_pattern)
+
+    @staticmethod
     def _lemma_pattern(token):
         return '{{lemma: {}}}'.format(token.lemma)
 
@@ -133,25 +151,3 @@ class PropertyProfile:
     @property
     def patterns(self):
         return self._patterns
-
-
-class ValuePattern:
-    def __init__(self, subject_relations, value_node, label_root_relations, label_pattern):
-        self._subject_relations = subject_relations
-        self._value_node = value_node
-        self._label_pattern = label_pattern
-        self._label_root_relations = label_root_relations
-
-    def build(self, subject_indices):
-        # Build subpattern matching subject of sentence
-        subject_indices_pattern = '|'.join([str(i + 1) for i in subject_indices])
-        subject_relation_patterns = ['{} {{idx: /{}/}}'.format(relation, subject_indices_pattern)
-                                     for relation in self._subject_relations]
-        subject_pattern = '[{}]'.format('|'.join(subject_relation_patterns))
-
-        # Build subpattern matching label of corresponding property
-        label_relation_patterns = ['{} ({} {})'.format(relation, self._label_pattern, subject_pattern)
-                                   for relation in self._label_root_relations]
-        relation_pattern = '[{}]'.format('|'.join(label_relation_patterns))
-
-        return '{} {}'.format(self._value_node, relation_pattern)
