@@ -1,25 +1,70 @@
+import os
+import json
 import operator
+from tempfile import NamedTemporaryFile
 
 
 class SyntacticalParser:
+    ANNOTATORS = ['tokenize', 'ssplit', 'pos', 'lemma', 'ner',
+                  'parse', 'depparse', 'mention', 'coref']
+
     def __init__(self, core_nlp):
         self._core_nlp = core_nlp
 
-    def parse(self, text, ner=False, dependency_type='basic'):
-        annotators = 'lemma,pos,depparse'
-        if ner:
-            annotators += ',ner'
+    def parse(self, text, dependency_type='basic',
+              coref_algorithm='statistical', http=False):
+        result = self._core_nlp.annotate(text, self.ANNOTATORS, {
+            'coref.algorithm': coref_algorithm
+        }, http)
 
-        annotations = self._core_nlp.http_client.annotate(text, properties={
-            'annotators': annotators,
-            'outputFormat': 'json'
-        })['sentences']
-
-        return [SyntacticalParseTree.from_json(sentence_tree, dependency_type)
-                for sentence_tree in annotations]
+        return SyntacticParsingResult.from_json(result, text, dependency_type)
 
 
-class SyntacticalParseTree:
+class SyntacticParsingResult:
+    def __init__(self, sentences, coreferences):
+        self._sentences = sentences
+        self._coreferences = coreferences
+
+    @property
+    def sentences(self):
+        return self._sentences
+
+    @property
+    def coreferences(self):
+        return self._coreferences
+
+    @staticmethod
+    def from_json(obj, document, dependency_type):
+        sentences = [Sentence.from_json(sentence, document, dependency_type)
+                       for sentence in obj['sentences']]
+        coreferences = CoreferenceCollection.from_json(obj['corefs'])
+
+        return SyntacticParsingResult(sentences, coreferences)
+
+
+class Sentence:
+    def __init__(self, text, parse_tree):
+        self._text = text
+        self._parse_tree = parse_tree
+
+    @property
+    def text(self):
+        return self._text
+
+    @property
+    def parse_tree(self):
+        return self._parse_tree
+
+    @staticmethod
+    def from_json(obj, document, dependency_type):
+        start = obj['tokens'][0]['characterOffsetBegin']
+        end = obj['tokens'][-1]['characterOffsetEnd']
+
+        return Sentence(document[start:end],
+                        ParseTree.from_json(obj, dependency_type))
+
+
+class ParseTree:
     def __init__(self, root_index=None, tokens=None, dependencies=None):
         self._root_index = root_index
         self._tokens = tokens or []
@@ -61,7 +106,7 @@ class SyntacticalParseTree:
                           for dependency_obj in obj[dependency_type]
                           if dependency_obj['dep'] == 'ROOT')
 
-        return SyntacticalParseTree(root_index, tokens, dependencies)
+        return ParseTree(root_index, tokens, dependencies)
 
 
 class Token:
@@ -159,3 +204,77 @@ class Dependency:
                           obj['governor'] - 1,
                           obj['dependent'] - 1,
                           obj['dep'])
+
+
+class CoreferenceCollection:
+    def __init__(self, coreferences):
+        self._coreferences = coreferences
+
+    def mentions_of(self, entity):
+        corefs = [coref for coref in self._coreferences
+                  if any(mention.text in entity or entity in mention.text
+                         for mention in coref.mentions)]
+        return [mention for coref in corefs for mention in coref.mentions]
+
+    def __iter__(self):
+        return iter(self._coreferences)
+
+    def __str__(self):
+        return '[{}]'.format(', '.join(self._coreferences))
+
+    @staticmethod
+    def from_json(obj):
+        return CoreferenceCollection([Coreference.from_json(x)
+                                      for x in obj.values()])
+
+
+class Coreference:
+    def __init__(self, mentions):
+        self._mentions = mentions
+
+    @property
+    def mentions(self):
+        return self._mentions
+
+    def __str__(self):
+        if self.mentions:
+            return str(self.mentions[0])
+
+    @staticmethod
+    def from_json(arr):
+        mentions = [Mention.from_json(obj) for obj in arr]
+        return Coreference(mentions)
+
+
+class Mention:
+    def __init__(self, sentence_index, start_index, end_index, text):
+        self._sentence_index = sentence_index
+        self._start_index = start_index
+        self._end_index = end_index
+        self._text = text
+
+    @property
+    def sentence_index(self):
+        return self._sentence_index
+
+    @property
+    def start_index(self):
+        return self._start_index
+
+    @property
+    def end_index(self):
+        return self._end_index
+
+    @property
+    def text(self):
+        return self._text
+
+    def __str__(self):
+        return self.text
+
+    @staticmethod
+    def from_json(obj):
+        return Mention(obj['sentNum'] - 1,
+                       obj['startIndex'] - 1,
+                       obj['endIndex'] - 1,
+                       obj['text'])

@@ -1,6 +1,9 @@
+import os
 import time
+import json
 import requests
 import subprocess
+from tempfile import NamedTemporaryFile
 from requests.exceptions import ConnectionError
 from pycorenlp import StanfordCoreNLP
 
@@ -18,14 +21,6 @@ class CoreNlpClient:
         self._process = None
         self._http_client = None
 
-    @property
-    def http_client(self):
-        return self._http_client
-
-    @property
-    def cwd(self):
-        return self._cwd
-
     def start(self):
         command = self.SERVER_COMMAND_PATTERN.format(self._memory,
                                                      self._timeout)
@@ -36,7 +31,45 @@ class CoreNlpClient:
     def stop(self):
         self._process.kill()
 
-    def run_cmd(self, properties):
+    def annotate(self, text, annotators, properties=None, http=False):
+        # Build properties
+        properties = properties or {}
+        properties = {**properties, **{'outputFormat': 'json',
+                                       'annotators': ','.join(annotators)}}
+
+        # Run annotators via HTTP request or command line execution
+        if http:
+            if self._http_client is None:
+                raise Exception('CoreNLP client is not running!')
+            return self._http_client.annotate(text, properties)
+        else:
+            return self._annotate_cmd(text, properties)
+
+    def _annotate_cmd(self, text, properties):
+        with NamedTemporaryFile(mode='w') as text_file:
+            # Write text to temporary file so that is can be processed by
+            # CoreNLP process
+            text_file.write(text)
+            text_file.flush()
+
+            # Run CoreNLP as subprocess
+            self._run_cmd({**properties, **{'file': text_file.name}})
+
+            # Read results and delete result file afterwards
+            result_file_name = os.path.join(self._cwd, os.path.basename(text_file.name) + '.json')
+            with open(result_file_name) as result_file:
+                results = json.load(result_file)
+            os.remove(result_file_name)
+
+            return results
+
+    def semgrex(self, text, pattern, filter=False):
+        if self._http_client is None:
+            raise Exception('CoreNLP client is not running!')
+
+        return self._http_client.semgrex(text, pattern=pattern, filter=filter)
+
+    def _run_cmd(self, properties):
         arguments = ' '.join(['-{} {}'.format(key, value)
                               for key, value in properties.items()])
         command = self.COMMAND_PATTERN.format(self._memory, arguments)

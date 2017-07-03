@@ -1,11 +1,8 @@
 class StatementBuilder:
-    def __init__(self, syntactical_parser):
-        self._syntactical_parser = syntactical_parser
-
-    def run(self, property_info, match, sentence):
-        # Get syntactical parse tree of sentence and find token of match
-        parse_tree = self._syntactical_parser.parse(sentence)[0]
-        token = parse_tree.tokens[match.start_index]
+    @staticmethod
+    def run(property_info, match, sentence):
+        # Find token of match in syntactical parse tree
+        token = sentence.parse_tree.tokens[match.start_index]
 
         # Follow compound dependencies
         compounds = [dep.dependent

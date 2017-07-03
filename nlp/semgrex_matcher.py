@@ -6,7 +6,7 @@ class SemgrexMatcher:
         self._core_nlp = core_nlp
 
     def run(self, text, pattern, filter=False):
-        result = self._core_nlp.http_client.semgrex(text, pattern=pattern, filter=filter)
+        result = self._core_nlp.semgrex(text, pattern, filter)
 
         # Catch errors
         if isinstance(result, str):
