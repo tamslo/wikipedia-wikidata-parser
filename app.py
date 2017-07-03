@@ -4,10 +4,10 @@ import wikipedia
 from clients.wikipedia import WikipediaClient
 from clients.wikidata import WikidataClient
 from analysis.property_profiler import PropertyProfiler
-from analysis.statement_builder import StatementBuilder
+from analysis.statement_extractor import StatementExtractor
 from nlp.corenlp_client import CoreNlpClient
 from nlp.syntactical_parser import SyntacticalParser
-from nlp.semgrex_matcher import SemgrexMatcher, SemgrexParseException
+from nlp.semgrex_matcher import SemgrexMatcher
 
 
 class WikipediaWikidataParser:
@@ -23,7 +23,7 @@ class WikipediaWikidataParser:
         self.syntactical_parser = SyntacticalParser(core_nlp)
         self.semgrex_matcher = SemgrexMatcher(core_nlp)
         self.property_profiler = PropertyProfiler(self.syntactical_parser)
-        self.statement_builder = StatementBuilder()
+        self.statement_extractor = StatementExtractor(self.semgrex_matcher)
 
         # Generate property profiles
         print("Building property patterns...")
@@ -38,20 +38,19 @@ class WikipediaWikidataParser:
         parse_result = self.syntactical_parser.parse(wp_article.sanitized_content)
         entity_mentions = parse_result.coreferences.mentions_of(wp_article.title)
 
-        # Filter sentences to include only those, in which the entity of
-        # the article is mentioned
-        coref_sentences = set(mention.sentence for mention in entity_mentions)
-
         # Apply property patterns on text
         for property_profile in self.property_profiles:
-            property_info = property_profile.property_info
-            print('Apply patterns of property {} ({})'.format(property_info.id, property_profile.property_info.label))
-            for pattern in property_profile.patterns:
-                for sentence in coref_sentences:
-                    # Get statements
-                    statements = self._extract_statements(sentence,
-                                                          property_info,
-                                                          pattern)
+            property_info = property_profile.info
+            print('Apply patterns of property {} ({})'.format(property_info.id, property_profile.info.label))
+            for sentence in parse_result.sentences:
+                # Get statements
+                statements = self.statement_extractor.run(sentence,
+                                                          property_profile,
+                                                          entity_mentions)
+                for statement in statements:
+                    print('Match found: "{}" in "{}" (Quality: {})'.format(statement.value,
+                                                                           sentence.text,
+                                                                           statement.quality.name))
             print()
 
     def _get_wp_article(self):
@@ -64,20 +63,6 @@ class WikipediaWikidataParser:
                 print('{} may refer to:'.format(title))
                 for option in e.options:
                     print(option)
-
-    def _extract_statements(self, sentence, property_info, pattern):
-        statements = []
-        try:
-            matches = self.semgrex_matcher.run(sentence, pattern)
-            for match in matches:
-                statement = self.statement_builder.run(property_info, match)
-                statements.append(statement)
-                print('Match found: "{}" in "{}"'.format(statement.value,
-                                                         sentence.text))
-        except (TimeoutError, SemgrexParseException) as e:
-            print(e)
-
-        return statements
 
 if __name__ == '__main__':
     # Read arguments

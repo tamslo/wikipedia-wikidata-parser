@@ -7,6 +7,9 @@ class PropertyProfiler:
         'quantity': ['CD'],
         'time': ['CD', 'NNP']
     }
+    NP_SUBJECT_RELATIONS = ['>/nmod:poss/']
+    NP_LABEL_ROOT_RELATIONS = ['>nsubj', '<appos']
+    VP_SUBJECT_RELATIONS = ['>nsubj', '>nsubjpass', '<acl']
 
     def __init__(self, syntactical_parser):
         self._syntactical_parser = syntactical_parser
@@ -55,8 +58,10 @@ class PropertyProfiler:
 
     def _build_noun_pattern(self, value_node, parse_tree):
         dep_pattern = self._build_dep_pattern(parse_tree.root, parse_tree)
-        return self._compile_pattern(['>/nmod:poss/'], value_node,
-                                     ['>nsubj', '<appos'], dep_pattern)
+        return self._compile_pattern(self.NP_SUBJECT_RELATIONS,
+                                     value_node,
+                                     self.NP_LABEL_ROOT_RELATIONS,
+                                     dep_pattern)
 
     def _build_verb_pattern(self, value_node, parse_tree):
         # Check root node has any dependency to prepositions, which can be
@@ -75,8 +80,10 @@ class PropertyProfiler:
         dep_pattern = self._build_dep_pattern(parse_tree.root,
                                               parse_tree, ['IN'])
 
-        return self._compile_pattern(['>nsubj', '>nsubjpass'], value_node,
-                                     [relation_pattern], dep_pattern)
+        return self._compile_pattern(self.VP_SUBJECT_RELATIONS,
+                                     value_node,
+                                     [relation_pattern],
+                                     dep_pattern)
 
     def _build_dep_pattern(self, token, parse_tree, exclude_pos=None):
         # Set default value for exclude_pos
@@ -140,13 +147,13 @@ class PropertyProfiler:
 
 
 class PropertyProfile:
-    def __init__(self, property_info, patterns):
-        self._property_info = property_info
+    def __init__(self, info, patterns):
+        self._info = info
         self._patterns = patterns
 
     @property
-    def property_info(self):
-        return self._property_info
+    def info(self):
+        return self._info
 
     @property
     def patterns(self):
