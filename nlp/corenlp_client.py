@@ -13,10 +13,11 @@ class CoreNlpClient:
     COMMAND_PATTERN = 'java -Xmx{} -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLP {}'
     SERVER_COMMAND_PATTERN = 'java -Xmx{} -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -timeout {}'
 
-    def __init__(self, cwd, memory='4g', timeout=15000):
+    def __init__(self, cwd, memory='4g', timeout=15000, verbose=False):
         self._cwd = cwd
         self._memory = memory
         self._timeout = timeout
+        self._verbose = verbose
 
         self._process = None
         self._http_client = None
@@ -76,9 +77,9 @@ class CoreNlpClient:
         return self._open_process(command)
 
     def _open_process(self, command, wait=True):
+        output = None if self._verbose else subprocess.DEVNULL
         process = subprocess.Popen(command, cwd=self._cwd, shell=True,
-                                   stdout=subprocess.DEVNULL,
-                                   stderr=subprocess.DEVNULL)
+                                   stdout=output, stderr=output)
         if wait:
             process.wait()
         else:

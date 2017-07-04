@@ -67,12 +67,13 @@ class WikipediaWikidataParser:
 if __name__ == '__main__':
     # Read arguments
     if len(sys.argv) <= 1:
-        print('Usage: python app.py [CORE_NLP_DIR]')
+        print('Usage: python app.py [CORE_NLP_DIR] [--verbose]')
     core_nlp_dir = sys.argv[1]
+    verbose = len(sys.argv) >= 3 and sys.argv[2] == '--verbose'
 
     # Initialize CoreNLP client
     print("Starting CoreNLP...")
-    core_nlp = CoreNlpClient(core_nlp_dir)
+    core_nlp = CoreNlpClient(core_nlp_dir, verbose=verbose)
     core_nlp.start()
 
     # Run app
