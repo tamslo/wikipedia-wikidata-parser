@@ -110,7 +110,7 @@ class ParseTree:
 
 
 class Token:
-    def __init__(self, tree, index, original_text, word, lemma, pos, ner):
+    def __init__(self, tree, index, original_text, word, lemma, pos, ner, normalized_ner):
         self._tree = tree
         self._index = index
         self._original_text = original_text
@@ -118,6 +118,7 @@ class Token:
         self._lemma = lemma
         self._pos = pos
         self._ner = ner
+        self._normalized_ner = normalized_ner
 
     @property
     def index(self):
@@ -143,6 +144,10 @@ class Token:
     def ner(self):
         return self._ner
 
+    @property
+    def normalized_ner(self):
+        return self._normalized_ner
+
     def has_dependencies(self, role=None):
         try:
             next(self.dependencies(role))
@@ -163,9 +168,12 @@ class Token:
 
     @staticmethod
     def from_json(tree, obj):
-        ner = None
-        if 'ner' in obj and obj['ner'] != '0':
+        # Get NER information, if present
+        ner = normalized_ner = None
+        if 'ner' in obj and obj['ner'] != 'O':
             ner = obj['ner']
+        if 'normalizedNER' in obj:
+            normalized_ner = obj['normalizedNER']
 
         return Token(tree,
                      obj['index'] - 1,
@@ -173,7 +181,8 @@ class Token:
                      obj['word'],
                      obj['lemma'],
                      obj['pos'],
-                     ner)
+                     ner,
+                     normalized_ner)
 
 
 class Dependency:

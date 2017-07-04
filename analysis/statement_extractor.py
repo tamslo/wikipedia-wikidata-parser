@@ -7,7 +7,7 @@ from nlp.semgrex_matcher import SemgrexParseException
 class StatementExtractor:
     DATA_TYPE_NER_MAPPING = {
         'wikibase-item': ['PERSON', 'ORGANIZATION', 'LOCATION'],
-        'quantity': ['NUMBER', 'MONEY'],
+        'quantity': ['NUMBER', 'MONEY', 'PERCENT'],
         'time': ['DATE', 'TIME']
     }
 
@@ -33,16 +33,7 @@ class StatementExtractor:
         return matches
 
     def _build_statement(self, property_info, match, entity_mentions):
-        # Follow compound dependencies
-        compounds = [dep.dependent
-                     for dep in match.tokens[0].dependencies(role='governor')
-                     if dep.dep == 'compound']
-
-        # Build value string
-        value_tokens = sorted([match.tokens[0]] + compounds, key=lambda x: x.index)
-        value = ' '.join(token.word for token in value_tokens)
-
-        # Validate quality of match
+        value = self._extend_value(match.named_tokens['value'][0])
         quality = self._validate_match(property_info, match, entity_mentions)
 
         return Statement(property_info, value, quality)
@@ -62,16 +53,33 @@ class StatementExtractor:
 
         return StatementQuality.ACCURATE
 
+    @staticmethod
+    def _extend_value(root_token):
+        # Use normalized NER, if present
+        if root_token.normalized_ner:
+            return root_token.normalized_ner
+
+        # Follow compound dependencies
+        compounds = [dep.dependent
+                     for dep in root_token.dependencies(role='governor')
+                     if dep.dep == 'compound']
+
+        # Build value string
+        value_tokens = sorted([root_token] + compounds, key=lambda x: x.index)
+        value = ' '.join(token.word for token in value_tokens)
+
+        return value
+
 
 class Statement:
     def __init__(self, property_info, value, quality):
-        self._propety_info = property_info
+        self._property_info = property_info
         self._value = value
         self._quality = quality
 
     @property
     def property_info(self):
-        return self._propety_info
+        return self._property_info
 
     @property
     def value(self):
