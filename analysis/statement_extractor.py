@@ -5,6 +5,12 @@ from nlp.semgrex_matcher import SemgrexParseException
 
 
 class StatementExtractor:
+    DATA_TYPE_NER_MAPPING = {
+        'wikibase-item': ['PERSON', 'ORGANIZATION', 'LOCATION'],
+        'quantity': ['NUMBER', 'MONEY'],
+        'time': ['DATE', 'TIME']
+    }
+
     def __init__(self, semgrex_matcher):
         self._semgrex_matcher = semgrex_matcher
 
@@ -48,7 +54,11 @@ class StatementExtractor:
                    for mention in entity_mentions):
             return StatementQuality.WRONG_SUBJECT
 
-        # TODO Check, if value matches property type using NER
+        # Check, if value matches property data type using NER
+        valid_ner_tags = self.DATA_TYPE_NER_MAPPING[property_info.data_type]
+        value_token = match.named_tokens['value'][0]
+        if value_token.ner not in valid_ner_tags:
+            return StatementQuality.WRONG_VALUE_TYPE
 
         return StatementQuality.ACCURATE
 
