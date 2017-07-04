@@ -6,16 +6,13 @@ from tempfile import NamedTemporaryFile
 
 class SyntacticalParser:
     ANNOTATORS = ['tokenize', 'ssplit', 'pos', 'lemma', 'ner',
-                  'parse', 'depparse', 'mention', 'coref']
+                  'parse', 'depparse', 'dcoref']
 
     def __init__(self, core_nlp):
         self._core_nlp = core_nlp
 
-    def parse(self, text, dependency_type='basic',
-              coref_algorithm='statistical', http=False):
-        result = self._core_nlp.annotate(text, self.ANNOTATORS, {
-            'coref.algorithm': coref_algorithm
-        }, http)
+    def parse(self, text, dependency_type='basic', http=False):
+        result = self._core_nlp.annotate(text, self.ANNOTATORS, http=http)
 
         return SyntacticParsingResult.from_json(result, text, dependency_type)
 
