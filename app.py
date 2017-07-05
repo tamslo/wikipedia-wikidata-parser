@@ -1,10 +1,11 @@
 import sys
 import wikipedia
+from termcolor import cprint
 
 from clients.wikipedia import WikipediaClient
 from clients.wikidata import WikidataClient
 from analysis.property_profiler import PropertyProfiler
-from analysis.statement_extractor import StatementExtractor
+from analysis.statement_extractor import StatementExtractor, StatementQuality
 from nlp.corenlp_client import CoreNlpClient
 from nlp.syntactical_parser import SyntacticalParser
 from nlp.semgrex_matcher import SemgrexMatcher
@@ -34,24 +35,38 @@ class WikipediaWikidataParser:
         wp_article = self._get_wp_article()
 
         # Syntactically parse the entire article
-        print("Analyzing article...")
+        print("Parsing article...")
         parse_result = self.syntactical_parser.parse(wp_article.sanitized_content)
         entity_mentions = parse_result.coreferences.mentions_of(wp_article.title)
 
         # Apply property patterns on text
+        print("Applying property patterns to article...")
+        cprint('\nRESULTS', attrs=['bold'])
+        statements = []
         for property_profile in self.property_profiles:
             property_info = property_profile.info
-            print('Apply patterns of property {} ({})'.format(property_info.id, property_profile.info.label))
+            cprint('Property {} ({})'.format(property_info.id, property_profile.info.label), attrs=['bold'])
             for sentence in parse_result.sentences:
                 # Get statements
-                statements = self.statement_extractor.run(sentence,
+                property_statements = self.statement_extractor.run(sentence,
                                                           property_profile,
                                                           entity_mentions)
-                for statement in statements:
-                    print('Match found: "{}" in "{}" (Quality: {})'.format(statement.value,
+                statements += property_statements
+
+                # Print detected statements
+                for statement in property_statements:
+                    cprint('Found value "{}" in "{}" (Quality: {})'.format(statement.value,
                                                                            sentence.text,
-                                                                           statement.quality.name))
+                                                                           statement.quality.name),
+                           'green' if statement.quality == StatementQuality.ACCURATE else 'yellow')
             print()
+
+        # Print summary
+        cprint('\nSUMMARY', attrs=['bold'])
+        print('{} statements were extracted in total.'.format(len(statements)))
+        for quality in set([statement.quality for statement in statements]):
+            count = len([x for x in statements if x.quality == quality])
+            print('{} of these have quality {}.'.format(count, quality.name))
 
     def _get_wp_article(self):
         while True:
@@ -81,5 +96,4 @@ if __name__ == '__main__':
         app = WikipediaWikidataParser(core_nlp)
         app.run()
     finally:
-        print("Shutting down CoreNLP...")
         core_nlp.stop()

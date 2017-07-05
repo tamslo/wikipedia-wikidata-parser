@@ -1,5 +1,5 @@
 from enum import Enum
-from termcolor import colored
+from termcolor import cprint
 
 from nlp.semgrex_matcher import SemgrexParseException
 
@@ -27,7 +27,7 @@ class StatementExtractor:
         try:
             matches = self._semgrex_matcher.run(sentence, pattern)
         except (TimeoutError, SemgrexParseException) as e:
-            print(colored('Error: ' + e))
+            cprint('Error: ' + str(e), 'red')
             return []
 
         return matches
