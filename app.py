@@ -5,6 +5,7 @@ from termcolor import cprint
 from clients.wikipedia import WikipediaClient
 from clients.wikidata import WikidataClient
 from analysis.property_profiler import PropertyProfiler
+from analysis.wikidata_entity_lookup import WikidataEntityLookup
 from analysis.statement_extractor import StatementExtractor, StatementQuality
 from nlp.corenlp_client import CoreNlpClient
 from nlp.syntactical_parser import SyntacticalParser
@@ -24,7 +25,8 @@ class WikipediaWikidataParser:
         self.syntactical_parser = SyntacticalParser(core_nlp)
         self.semgrex_matcher = SemgrexMatcher(core_nlp)
         self.property_profiler = PropertyProfiler(self.syntactical_parser)
-        self.statement_extractor = StatementExtractor(self.semgrex_matcher)
+        self.wikidata_entity_lookup = WikidataEntityLookup()
+        self.statement_extractor = StatementExtractor(self.semgrex_matcher, self.wikidata_entity_lookup)
 
         # Generate property profiles
         print("Building property patterns...")
@@ -49,8 +51,8 @@ class WikipediaWikidataParser:
             for sentence in parse_result.sentences:
                 # Get statements
                 property_statements = self.statement_extractor.run(sentence,
-                                                          property_profile,
-                                                          entity_mentions)
+                                                                   property_profile,
+                                                                   entity_mentions)
                 statements += property_statements
 
                 # Print detected statements

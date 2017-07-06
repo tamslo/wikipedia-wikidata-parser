@@ -11,8 +11,9 @@ class StatementExtractor:
         'time': ['DATE', 'TIME']
     }
 
-    def __init__(self, semgrex_matcher):
+    def __init__(self, semgrex_matcher, wikidata_entity_lookup):
         self._semgrex_matcher = semgrex_matcher
+        self._wikidata_entity_lookup = wikidata_entity_lookup
 
     def run(self, sentence, property_profile, entity_mentions):
         statements = []
@@ -33,8 +34,16 @@ class StatementExtractor:
         return matches
 
     def _build_statement(self, property_info, match, entity_mentions):
+        # Extract value from pattern match and validate quality of match
         value = self._extend_value(match.named_tokens['value'][0])
         quality = self._validate_match(property_info, match, entity_mentions)
+
+        # Get corresponding wikidata entity, if property references items
+        value_ner = match.named_tokens['value'][0].ner
+        if property_info.data_type == 'wikibase-item' and quality is not StatementQuality.WRONG_VALUE_TYPE:
+            entity = self._wikidata_entity_lookup.get(value, value_ner)
+            if entity:
+                value = '{} ({})'.format(entity['id'], entity['labels']['en']['value'])
 
         return Statement(property_info, value, quality)
 
