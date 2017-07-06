@@ -67,9 +67,12 @@ class WikidataEntityLookup:
         if response.status_code != 200:
             raise Exception('Could not query Wikidata entities.')
 
-        result = json.loads(response.text)['search']
-        return [entity['title'] for entity in result
-                if entity['description'] != 'Wikipedia disambiguation page']
+        result = json.loads(response.text)
+        if 'search' in result:
+            return [entity['title'] for entity in result['search']
+                    if 'description' not in entity or entity['description'] != 'Wikipedia disambiguation page']
+
+        return []
 
     def _get_items(self, ids):
         response = self._request(action='wbgetentities',
@@ -80,5 +83,9 @@ class WikidataEntityLookup:
         if response.status_code != 200:
             raise Exception('Could not retrieve Wikidata items.')
 
-        result = json.loads(response.text)['entities']
-        return sorted(result.values(), key=lambda x: ids.index(x['id']))
+        result = json.loads(response.text)
+        if 'entities' in result:
+            return sorted(result['entities'].values(), key=lambda x: ids.index(x['id']))
+
+        return []
+
