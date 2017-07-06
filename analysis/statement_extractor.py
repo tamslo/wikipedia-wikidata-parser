@@ -40,7 +40,7 @@ class StatementExtractor:
 
         # Get corresponding wikidata entity, if property references items
         value_ner = match.named_tokens['value'][0].ner
-        if property_info.data_type == 'wikibase-item' and quality is not StatementQuality.WRONG_VALUE_TYPE:
+        if property_info.data_type == 'wikibase-item' and value_ner in self.DATA_TYPE_NER_MAPPING[property_info.data_type]:
             entity = self._wikidata_entity_lookup.get(value, value_ner)
             if entity:
                 value = '{} ({})'.format(entity['id'], entity['labels']['en']['value'])
