@@ -6,14 +6,14 @@ A parser that converts text in Wikipedia to statements in Wikidata using NLP tec
 2. Install dependencies `pip install -r requirements.txt`.
 
 ## Execution
-Run `python app.py [CORE_NLP_DIR] [--verbose]`, where `CORE_NLP_DIR` is the installation directory of CoreNLP. 
+Run `python app.py [CORE_NLP_DIR]  [ARTICLE] [--verbose]`, where `CORE_NLP_DIR` is the installation directory of CoreNLP and the article needs to be in quotes.
 
-When setting the flag `--verbose`, the `stdout and stderr` of the CoreNLP processor is piped to the `stdout` of the application. 
+When setting the flag `--verbose`, the `stdout and stderr` of the CoreNLP processor is piped to the `stdout` of the application.
 
 ## Documentation
 
 ### Algorithm
-1. Generate [semgrex patterns](https://nlp.stanford.edu/nlp/javadoc/javanlp/edu/stanford/nlp/semgraph/semgrex/SemgrexPattern.html) for each property and label/alias matching possible values for that property
+1. Generate [Semgrex patterns](https://nlp.stanford.edu/nlp/javadoc/javanlp/edu/stanford/nlp/semgraph/semgrex/SemgrexPattern.html) for each property and label/alias matching possible values for that property
 2. Apply patterns on article text sentence-wise
 3. Validate extracted information and reject invalid candidates
 4. Build statements from valid candidates and lookup referenced Wikidata items

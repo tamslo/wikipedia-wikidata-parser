@@ -32,9 +32,9 @@ class WikipediaWikidataParser:
         print("Building property patterns...")
         self.property_profiles = self.property_profiler.run(self.wd_properties)
 
-    def run(self):
+    def run(self, article_title):
         # Get wikipedia article
-        wp_article = self._get_wp_article()
+        wp_article = self._get_wp_article(article_title)
 
         # Syntactically parse the entire article
         print("Parsing article...")
@@ -70,14 +70,12 @@ class WikipediaWikidataParser:
             count = len([x for x in statements if x.quality == quality])
             print('{} of these have quality {}.'.format(count, quality.name))
 
-    def _get_wp_article(self):
+    def _get_wp_article(self, article_title):
         while True:
-            # TODO title = input('Wikipedia Article? ')
-            title = 'Douglas Adams'
             try:
-                return self.wp_client.get_article(title)
+                return self.wp_client.get_article(article_title)
             except wikipedia.DisambiguationError as e:
-                print('{} may refer to:'.format(title))
+                print('{} may refer to:'.format(article_title))
                 for option in e.options:
                     print(option)
 
@@ -86,7 +84,8 @@ if __name__ == '__main__':
     if len(sys.argv) <= 1:
         print('Usage: python app.py [CORE_NLP_DIR] [--verbose]')
     core_nlp_dir = sys.argv[1]
-    verbose = len(sys.argv) >= 3 and sys.argv[2] == '--verbose'
+    article_title = sys.argv[2]
+    verbose = len(sys.argv) >= 4 and sys.argv[3] == '--verbose'
 
     # Initialize CoreNLP client
     print("Starting CoreNLP...")
@@ -96,6 +95,6 @@ if __name__ == '__main__':
     # Run app
     try:
         app = WikipediaWikidataParser(core_nlp)
-        app.run()
+        app.run(article_title)
     finally:
         core_nlp.stop()
