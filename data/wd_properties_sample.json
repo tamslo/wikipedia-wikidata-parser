@@ -161,5 +161,68 @@
       "is daughter of",
       "is child of"
     ]
+  },
+  {
+    "description": "date or point in time when the organization/object was founded/created",
+    "datatype": "time",
+    "id": "P571",
+    "label": "inception",
+    "example": [36380],
+    "types": ["for items about organizations"],
+    "aliases": ["date founded", "date created", "incorporated", "foundation", "founded", "created", "date of foundation", "date of creation", "established", "establishment date", "foundation date", "creation date", "incorporation date", "date incorporated", "date of incorporation", "date of establishment", "founding date", "date of founding", "date formed", "formation date", "formed on date", "founded on date", "incorporated on date", "established on date", "created on date", "commencement date", "date commenced", "commenced on date", "date of commencement", "foundation/creation date", "time of foundation or creation", "date of foundation or creation", "written on date", "time of inception", "year founded", "year created", "year incorporated", "year written", "year commenced", "year established", "date constructed", "construction date", "constructed", "inititated", "formation", "dedication date", "formed in", "formed at"]
+  },
+  {
+    "description": "founder or co-founder of this organization, religion or place",
+    "datatype": "wikibase-item",
+    "id": "P112",
+    "label": "founded by",
+    "example": [312],
+    "types": ["for items about organizations"],
+    "aliases": ["is founded by", "founded", "co-founder", "founders", "founder"]
+  },
+  {
+    "description": "specific location where an organization's HQ is or has been situated",
+    "datatype": "wikibase-item",
+    "id": "P159",
+    "label": "headquarters location",
+    "example": [7795, 180, 154950, 7420622],
+    "types": ["for items about organizations"],
+    "aliases": ["head office location", "HQ", "garrison", "admin HQ", "seat", "principle office"]
+  },
+  {
+    "description": "industry of company or organization",
+    "datatype": "wikibase-item",
+    "id": "P452",
+    "label": "industry",
+    "example": [485593],
+    "types": ["for items about organizations", "related to economics"],
+    "aliases": ["field of action", "field of exercise", "sector", "branch", "economic branch"]
+  },
+  {
+    "description": "sovereign state of this item",
+    "datatype": "wikibase-item",
+    "id": "P17",
+    "label": "country",
+    "example": [2807, 2270034],
+    "types": ["for places"],
+    "aliases": ["sovereign state", "nation", "state", "land"]
+  },
+  {
+    "description": "primary city of a country, state or other type of administrative territorial entity",
+    "datatype": "wikibase-item",
+    "id": "P36",
+    "label": "capital",
+    "example": [191, 159, 38, 142],
+    "types": ["to indicate a location"],
+    "aliases": ["capital city", "capital town", "chef-lieu", "principal place", "county seat", "administrative centre", "administrative headquarters"]
+  },
+  {
+    "description": "date or point in time an event, museum, theater etc. officially opened",
+    "datatype": "time",
+    "id": "P1619",
+    "label": "date of official opening",
+    "example": [2829376],
+    "types": [],
+    "aliases": ["time of official opening", "opening date", "opened", "date opened", "officially opened on", "inaugurated", "launch date", "introduced", "introduction"]
   }
 ]
