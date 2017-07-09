@@ -2,7 +2,7 @@
 A parser that converts text in Wikipedia to statements in Wikidata using NLP techniques.
 
 ## Installation
-1. Download and extract Stanford CoreNLP from https://stanfordnlp.github.io/CoreNLP/#download.
+1. Download and extract Stanford CoreNLP from https://stanfordnlp.github.io/CoreNLP/#download (Java neeeds to be installed for execution).
 2. Install dependencies `pip install -r requirements.txt`.
 
 ## Execution
