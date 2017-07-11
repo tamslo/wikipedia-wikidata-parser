@@ -1,7 +1,4 @@
-import os
-import json
 import operator
-from tempfile import NamedTemporaryFile
 
 
 class SyntacticalParser:

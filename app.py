@@ -38,8 +38,17 @@ class WikipediaWikidataParser:
 
         # Syntactically parse the entire article
         print("Parsing article...")
-        parse_result = self.syntactical_parser.parse(wp_article.sanitized_content)
-        entity_mentions = parse_result.coreferences.mentions_of(wp_article.title)
+        content_parse_result = self.syntactical_parser.parse(wp_article.sanitized_content)
+
+        # Filter out mentions with wrong NER tag
+        entity_mentions = content_parse_result.coreferences.mentions_of(wp_article.title)
+        title_parse_result = self.syntactical_parser.parse(wp_article.title, http=True)
+        title_ner_tokens = [token.ner for token in title_parse_result.sentences[0].parse_tree.tokens if token.ner]
+        if len(set(title_ner_tokens)) == 1:
+            title_ner = title_ner_tokens[0]
+            entity_mentions = [mention for mention in entity_mentions
+                               if all([token.ner is None for token in mention.tokens])
+                               or all([token.ner == title_ner for token in mention.tokens])]
 
         # Apply property patterns on text
         print("Applying property patterns to article...")
@@ -48,7 +57,7 @@ class WikipediaWikidataParser:
         for property_profile in self.property_profiles:
             property_info = property_profile.info
             cprint('Property {} ({})'.format(property_info.id, property_profile.info.label), attrs=['bold'])
-            for sentence in parse_result.sentences:
+            for sentence in content_parse_result.sentences:
                 # Get statements
                 property_statements = self.statement_extractor.run(sentence,
                                                                    property_profile,
