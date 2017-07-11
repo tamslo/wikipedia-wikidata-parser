@@ -32,9 +32,9 @@ class WikipediaWikidataParser:
         print("Building property patterns...")
         self.property_profiles = self.property_profiler.run(self.wd_properties)
 
-    def run(self, article_title):
+    def run(self, title):
         # Get wikipedia article
-        wp_article = self._get_wp_article(article_title)
+        wp_article = self._get_wp_article(title)
 
         # Syntactically parse the entire article
         print("Parsing article...")
@@ -70,22 +70,22 @@ class WikipediaWikidataParser:
             count = len([x for x in statements if x.quality == quality])
             print('{} of these have quality {}.'.format(count, quality.name))
 
-    def _get_wp_article(self, article_title):
-        while True:
-            try:
-                return self.wp_client.get_article(article_title)
-            except wikipedia.DisambiguationError as e:
-                print('{} may refer to:'.format(article_title))
-                for option in e.options:
-                    print(option)
+    def _get_wp_article(self, title):
+        try:
+            return self.wp_client.get_article(title)
+        except wikipedia.DisambiguationError as e:
+            print('{} may refer to:'.format(title))
+            for option in e.options:
+                print(option)
+            sys.exit(1)
 
 if __name__ == '__main__':
     # Read arguments
     if len(sys.argv) <= 1:
-        print('Usage: python app.py [CORE_NLP_DIR] [--verbose]')
+        print('Usage: python app.py [CORE_NLP_DIR] [ARTICLE_TITLE] [--verbose]')
     core_nlp_dir = sys.argv[1]
     article_title = sys.argv[2]
-    verbose = len(sys.argv) >= 4 and sys.argv[3] == '--verbose'
+    verbose = '--verbose' in sys.argv
 
     # Initialize CoreNLP client
     print("Starting CoreNLP...")

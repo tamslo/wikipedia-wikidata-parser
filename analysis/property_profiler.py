@@ -7,7 +7,7 @@ class PropertyProfiler:
         'quantity': ['CD'],
         'time': ['CD', 'NNP']
     }
-    NP_SUBJECT_RELATIONS = ['>/nmod:poss/']
+    NP_SUBJECT_RELATIONS = ['>/nmod:poss/', '>/nmod:of/']
     NP_LABEL_ROOT_RELATIONS = ['>nsubj', '<appos']
     VP_SUBJECT_RELATIONS = ['>nsubj', '>nsubjpass', '<acl']
 

@@ -1,7 +1,9 @@
 import json
 import requests
+import itertools
 from Levenshtein import distance
 from urllib.parse import urlencode
+from utils.helpers import flatten
 
 
 class WikidataEntityLookup:
@@ -38,7 +40,8 @@ class WikidataEntityLookup:
             raise ValueError('NER tag is not supported for entity lookup.')
 
         # Get candidate items
-        candidate_ids = self._search_items(title)
+        candidate_ids = flatten([self._search_items(x)
+                                 for x in self._extend_title(title)], True)
         candidates = self._get_items(candidate_ids)
 
         # Remove items from candidates, which do not have any of the
@@ -57,6 +60,12 @@ class WikidataEntityLookup:
     def _request(self, **kwargs):
         url = '{}?{}'.format(self.API_URL, urlencode(kwargs))
         return requests.get(url)
+
+    @staticmethod
+    def _extend_title(title):
+        split_title = title.split(' ')
+        return flatten([' '.join(itertools.combinations(split_title, i))
+                        for i in range(len(split_title))])
 
     def _search_items(self, title):
         response = self._request(action='wbsearchentities',
