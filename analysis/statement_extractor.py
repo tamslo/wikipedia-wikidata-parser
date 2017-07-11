@@ -2,6 +2,7 @@ from enum import Enum
 from termcolor import cprint
 
 from nlp.semgrex_matcher import SemgrexParseException
+from utils.helpers import first
 
 
 class StatementExtractor:
@@ -62,8 +63,7 @@ class StatementExtractor:
 
         return StatementQuality.ACCURATE
 
-    @staticmethod
-    def _extend_value(root_token):
+    def _extend_value(self, root_token):
         # Use normalized NER, if present
         if root_token.normalized_ner:
             return root_token.normalized_ner
@@ -73,11 +73,25 @@ class StatementExtractor:
                      for dep in root_token.dependencies(role='governor')
                      if dep.dep == 'compound']
 
+        # Follow nmod dependencies, if root is noun
+        if root_token.pos.startswith('NN'):
+            compounds += self._extract_nmod_tuples(root_token)
+
         # Build value string
         value_tokens = sorted([root_token] + compounds, key=lambda x: x.index)
         value = ' '.join(token.word for token in value_tokens)
 
         return value
+
+    @staticmethod
+    def _extract_nmod_tuples(root_token):
+        for nmod_dep in root_token.dependencies(role='governor'):
+            if nmod_dep.dep.startswith('nmod'):
+                nmod_token = nmod_dep.dependent
+                case_token = first(case_dep.dependent
+                                   for case_dep in nmod_token.dependencies(role='governor')
+                                   if case_dep.dep == 'case')
+                yield (nmod_token, case_token)
 
 
 class Statement:
