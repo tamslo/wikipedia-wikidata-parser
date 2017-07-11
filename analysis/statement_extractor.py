@@ -2,7 +2,7 @@ from enum import Enum
 from termcolor import cprint
 
 from nlp.semgrex_matcher import SemgrexParseException
-from utils.helpers import first
+from utils.helpers import first, flatten
 
 
 class StatementExtractor:
@@ -75,7 +75,7 @@ class StatementExtractor:
 
         # Follow nmod dependencies, if root is noun
         if root_token.pos.startswith('NN'):
-            compounds += self._extract_nmod_tuples(root_token)
+            compounds += flatten(self._extract_nmod_tuples(root_token))
 
         # Build value string
         value_tokens = sorted([root_token] + compounds, key=lambda x: x.index)
