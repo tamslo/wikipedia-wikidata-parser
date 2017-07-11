@@ -64,8 +64,9 @@ class WikidataEntityLookup:
     @staticmethod
     def _extend_title(title):
         split_title = title.split(' ')
-        return flatten([' '.join(itertools.combinations(split_title, i))
-                        for i in range(len(split_title))])
+        title_combinations = flatten([itertools.combinations(split_title, i +1)
+                                      for i in range(len(split_title))])
+        return [' '.join(combination) for combination in title_combinations]
 
     def _search_items(self, title):
         response = self._request(action='wbsearchentities',
