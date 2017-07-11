@@ -2,6 +2,9 @@ from utils.helpers import first
 
 
 class PropertyProfiler:
+    PREPOSITION_RELATION_MAPPING = {
+        'by': 'nmod:agent'
+    }
     DATA_TYPE_POS_MAPPING = {
         'wikibase-item': ['NN.*'],
         'quantity': ['CD'],
@@ -72,8 +75,11 @@ class PropertyProfiler:
                                 if dep.dependent.pos == 'IN')
         if prep_dependency:
             dependent = prep_dependency.dependent
-            relation_name = '{}:{}'.format(relation_name,
-                                           dependent.word.lower())
+            if dependent.word in self.PREPOSITION_RELATION_MAPPING:
+                relation_name = self.PREPOSITION_RELATION_MAPPING[dependent.word]
+            else:
+                relation_name = '{}:{}'.format(relation_name,
+                                               dependent.word.lower())
 
         # Build relation and dependent patterns
         relation_pattern = self._relation_pattern(relation_name, direction='<')
