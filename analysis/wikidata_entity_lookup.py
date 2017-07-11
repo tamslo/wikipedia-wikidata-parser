@@ -10,10 +10,13 @@ class WikidataEntityLookup:
     API_URL = 'https://www.wikidata.org/w/api.php'
     CHARACTERISTIC_PROPERTIES = {
         'PERSON': {
-            'P12',    # sex or gender
+            'P21',    # sex or gender
+            'P26',    # spouse
             'P27',    # country of citizenship
+            'P40',    # child
             'P569',   # date of birth
             'P570',   # date of death
+            'P753',   # given name
             'P1477'   # birth name
         },
         'LOCATION': {
