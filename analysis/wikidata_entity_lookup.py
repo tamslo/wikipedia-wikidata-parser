@@ -1,7 +1,7 @@
 import json
 import requests
 import itertools
-from Levenshtein import distance
+from ngram import NGram
 from urllib.parse import urlencode
 from utils.helpers import flatten
 
@@ -52,10 +52,10 @@ class WikidataEntityLookup:
         candidates = [item for item in candidates
                       if characteristic_properties.intersection(present_properties[item['id']])]
 
-        # Return candidate with the minimal edit distance between its label
-        # and the provided title
+        # Return candidate with the maximal similarity of its label and the
+        # provided title
         if candidates:
-            return min(candidates, key=lambda item: distance(title, item['labels']['en']['value']))
+            return max(candidates, key=lambda item: NGram.compare(title, item['labels']['en']['value'], N=2))
 
     def _request(self, **kwargs):
         url = '{}?{}'.format(self.API_URL, urlencode(kwargs))
@@ -63,9 +63,9 @@ class WikidataEntityLookup:
 
     @staticmethod
     def _extend_title(title):
-        split_title = title.split(' ')
-        title_combinations = flatten([itertools.combinations(split_title, i +1)
-                                      for i in range(len(split_title))])
+        words = title.split(' ')
+        title_combinations = flatten([itertools.permutations(words, i+1)
+                                      for i in reversed(range(len(words)))])
         return [' '.join(combination) for combination in title_combinations]
 
     def _search_items(self, title):
