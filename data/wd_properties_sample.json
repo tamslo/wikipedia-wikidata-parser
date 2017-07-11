@@ -92,29 +92,6 @@
     ]
   },
   {
-    "description": "occupation of a person; see also \"field of work\" (Property:P101), \"position held\" (Property:P39)",
-    "datatype": "wikibase-item",
-    "id": "P106",
-    "label": "occupation",
-    "example": [
-      42037,
-      83338,
-      7327,
-      42402
-    ],
-    "types": [
-      "for items about people"
-    ],
-    "aliases": [
-      "profession",
-      "job",
-      "work",
-      "career",
-      "employment",
-      "craft"
-    ]
-  },
-  {
     "description": "male parent",
     "datatype": "wikibase-item",
     "id": "P22",
@@ -169,7 +146,7 @@
     "label": "inception",
     "example": [36380],
     "types": ["for items about organizations"],
-    "aliases": ["date founded", "date created", "incorporated", "foundation", "founded", "created", "date of foundation", "date of creation", "established", "establishment date", "foundation date", "creation date", "incorporation date", "date incorporated", "date of incorporation", "date of establishment", "founding date", "date of founding", "date formed", "formation date", "formed on date", "founded on date", "incorporated on date", "established on date", "created on date", "commencement date", "date commenced", "commenced on date", "date of commencement", "time of foundation or creation", "date of foundation or creation", "written on date", "time of inception", "year founded", "year created", "year incorporated", "year written", "year commenced", "year established", "date constructed", "construction date", "constructed", "inititated", "formation", "dedication date", "formed in", "formed at"]
+    "aliases": ["date founded", "date created", "incorporated", "foundation", "founded", "created", "date of foundation", "date of creation", "established", "establishment date", "foundation date", "creation date", "incorporation date", "date incorporated", "date of incorporation", "date of establishment", "founding date", "date of founding", "date formed", "formation date", "formed on date", "founded on date", "incorporated on date", "established on date", "created on date", "commencement date", "date commenced", "commenced on date", "date of commencement", "time of foundation or creation", "date of foundation or creation", "written on date", "time of inception", "year founded", "year created", "year incorporated", "year written", "year commenced", "year established", "date constructed", "construction date", "constructed", "inititated", "formation", "dedication date", "formed in", "formed at", "founded in"]
   },
   {
     "description": "founder of this organization, religion or place",
@@ -187,7 +164,7 @@
     "label": "headquarters location",
     "example": [7795, 180, 154950, 7420622],
     "types": ["for items about organizations"],
-    "aliases": ["head office location", "HQ", "garrison", "admin HQ", "seat", "principle office"]
+    "aliases": ["head office location", "HQ", "garrison", "admin HQ", "seat", "principle office", "located in"]
   },
   {
     "description": "industry of company or organization",
@@ -224,5 +201,23 @@
     "example": [2829376],
     "types": [],
     "aliases": ["time of official opening", "opening date", "opened", "date opened", "officially opened on", "inaugurated", "launch date", "introduced", "introduction"]
-  }
+  },
+  {
+    "description": "highest-ranking corporate officer appointed as the CEO within an organization",
+    "datatype": "wikibase-item",
+    "id": "P169",
+    "label": "chief executive officer",
+    "example": [95, 37093],
+    "types": [],
+    "aliases": ["CEO", "chief executive", "ceo"]
+  },
+  {
+    "description": "legal form of an organization",
+    "datatype": "wikibase-item",
+    "id": "P1454",
+    "label": "legal form",
+    "example": [169552],
+    "types": [],
+    "aliases": ["type of business entity", "legal status"]
+  },
 ]
