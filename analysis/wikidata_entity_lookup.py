@@ -42,6 +42,9 @@ class WikidataEntityLookup:
         if ner_tag not in self.CHARACTERISTIC_PROPERTIES.keys():
             raise ValueError('NER tag is not supported for entity lookup.')
 
+        # Prepare title
+        title = title.replace('ue', 'ü').replace('ae', 'ä').replace('ue', 'ü')
+
         # Get candidate items
         candidate_ids = flatten([self._search_items(x)
                                  for x in self._extend_title(title)], True)

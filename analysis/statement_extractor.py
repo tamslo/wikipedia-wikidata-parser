@@ -75,7 +75,7 @@ class StatementExtractor:
 
         # Follow nmod dependencies, if root is noun
         if root_token.pos.startswith('NN'):
-            compounds += flatten(self._extract_nmod_tuples(root_token))
+            compounds += flatten(self._extract_nmod_tuples(root_token, 'of'))
 
         # Build value string
         value_tokens = sorted([root_token] + compounds, key=lambda x: x.index)
@@ -84,9 +84,10 @@ class StatementExtractor:
         return value
 
     @staticmethod
-    def _extract_nmod_tuples(root_token):
+    def _extract_nmod_tuples(root_token, modifier=None):
+        relation_name = 'nmod:{}'.format(modifier) if modifier is not None else 'nmod'
         for nmod_dep in root_token.dependencies(role='governor'):
-            if nmod_dep.dep.startswith('nmod'):
+            if nmod_dep.dep == relation_name:
                 nmod_token = nmod_dep.dependent
                 case_token = first(case_dep.dependent
                                    for case_dep in nmod_token.dependencies(role='governor')

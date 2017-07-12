@@ -38,7 +38,7 @@ class WikipediaWikidataParser:
 
         # Syntactically parse the entire article
         print("Parsing article...")
-        content_parse_result = self.syntactical_parser.parse(wp_article.sanitized_content)
+        content_parse_result = self.syntactical_parser.parse(wp_article.sanitized_content, dependency_type='enhanced++')
 
         # Filter out mentions with wrong NER tag
         entity_mentions = content_parse_result.coreferences.mentions_of(wp_article.title)
