@@ -1,0 +1,42 @@
+Starting CoreNLP...
+Building property patterns...
+Parsing article...
+Applying property patterns to article...
+[1m
+RESULTS[0m
+[1mProperty P19 (place of birth)[0m
+
+[1mProperty P20 (place of death)[0m
+
+[1mProperty P569 (date of birth)[0m
+
+[1mProperty P570 (date of death)[0m
+
+[1mProperty P22 (father)[0m
+
+[1mProperty P25 (mother)[0m
+
+[1mProperty P571 (inception)[0m
+
+[1mProperty P112 (founded by)[0m
+
+[1mProperty P159 (headquarters location)[0m
+
+[1mProperty P452 (industry)[0m
+[33mFound value "trade" in "The five largest sectors of employment in California are trade, transportation, and utilities; government; professional and business services; education and health services; and leisure and hospitality." (Quality: WRONG_SUBJECT)[0m
+
+[1mProperty P17 (country)[0m
+
+[1mProperty P36 (capital)[0m
+[33mFound value "Q18013 (Sacramento)" in "The state's capital is Sacramento." (Quality: WRONG_SUBJECT)[0m
+
+[1mProperty P1619 (date of official opening)[0m
+
+[1mProperty P169 (chief executive officer)[0m
+
+[1mProperty P1454 (legal form)[0m
+
+[1m
+SUMMARY[0m
+2 statements were extracted in total.
+2 of these have quality WRONG_SUBJECT.

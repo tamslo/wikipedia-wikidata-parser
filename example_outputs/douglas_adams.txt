@@ -15,8 +15,8 @@ RESULTS[0m
 [32mFound value "1994-06-22" in "Adams and Belson had one daughter together, Polly Jane Rocket Adams, born on 22 June 1994, shortly after Adams turned 42." (Quality: ACCURATE)[0m
 
 [1mProperty P570 (date of death)[0m
-[33mFound value "California" in "When he died in 2001 in California, he had been trying again to get the movie project started with Disney, which had bought the rights in 1998." (Quality: WRONG_VALUE_TYPE)[0m
 [32mFound value "2001" in "When he died in 2001 in California, he had been trying again to get the movie project started with Disney, which had bought the rights in 1998." (Quality: ACCURATE)[0m
+[33mFound value "California" in "When he died in 2001 in California, he had been trying again to get the movie project started with Disney, which had bought the rights in 1998." (Quality: WRONG_VALUE_TYPE)[0m
 [33mFound value "2011-09-07" in "Jane died on 7 September 2011 of cancer, aged 59." (Quality: WRONG_SUBJECT)[0m
 
 [1mProperty P22 (father)[0m
@@ -24,7 +24,7 @@ RESULTS[0m
 [1mProperty P25 (mother)[0m
 
 [1mProperty P571 (inception)[0m
-[32mFound value "1996" in "Douglas Adams continues to be remembered by the University of York's Douglas Adams Society, which was formed in 1996." (Quality: ACCURATE)[0m
+[33mFound value "1996" in "Douglas Adams continues to be remembered by the University of York's Douglas Adams Society, which was formed in 1996." (Quality: WRONG_SUBJECT)[0m
 
 [1mProperty P112 (founded by)[0m
 
@@ -45,6 +45,6 @@ RESULTS[0m
 [1m
 SUMMARY[0m
 8 statements were extracted in total.
-1 of these have quality WRONG_SUBJECT.
 1 of these have quality WRONG_VALUE_TYPE.
-6 of these have quality ACCURATE.
+5 of these have quality ACCURATE.
+2 of these have quality WRONG_SUBJECT.

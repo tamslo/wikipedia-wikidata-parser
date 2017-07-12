@@ -1,0 +1,58 @@
+Starting CoreNLP...
+Building property patterns...
+Parsing article...
+Applying property patterns to article...
+[1m
+RESULTS[0m
+[1mProperty P19 (place of birth)[0m
+[31mError: Timeout when executing Semgrex query[0m
+[32mFound value "Q188712 (Empire of Japan)" in "Albert Einstein was born in Ulm, in the Kingdom of Wurttemberg in the German Empire, on 14 March 1879." (Quality: ACCURATE)[0m
+[32mFound value "Q3012 (Ulm)" in "Albert Einstein was born in Ulm, in the Kingdom of Wurttemberg in the German Empire, on 14 March 1879." (Quality: ACCURATE)[0m
+[33mFound value "Q55630 (Novi Sad)" in "The discovery and publication in 1987 of an early correspondence between Einstein and Maric revealed that they had had a daughter, called "Lieserl" in their letters, born in early 1902 in Novi Sad where Maric was staying with her parents." (Quality: WRONG_SUBJECT)[0m
+[33mFound value "Q70 (Bern)" in "In May 1904, their first son, Hans Albert Einstein, was born in Bern, Switzerland." (Quality: WRONG_SUBJECT)[0m
+[33mFound value "1904-05" in "In May 1904, their first son, Hans Albert Einstein, was born in Bern, Switzerland." (Quality: WRONG_SUBJECT)[0m
+[33mFound value "1910-07" in "Their second son, Eduard, was born in Zurich in July 1910." (Quality: WRONG_SUBJECT)[0m
+[33mFound value "Q230417 (Zurich)" in "Their second son, Eduard, was born in Zurich in July 1910." (Quality: WRONG_SUBJECT)[0m
+
+[1mProperty P20 (place of death)[0m
+[33mFound value "infancy" in "The contents of his letter to Maric in September 1903 suggest that the girl was either given up for adoption or died of scarlet fever in infancy." (Quality: WRONG_SUBJECT)[0m
+[33mFound value "1936-12" in "In 1935, Elsa Einstein was diagnosed with heart and kidney problems; she died in December 1936." (Quality: WRONG_SUBJECT)[0m
+[32mFound value "Q138518 (Princeton)" in "He died in Princeton Hospital early the next morning at the age of 76, having continued to work until near the end." (Quality: ACCURATE)[0m
+
+[1mProperty P569 (date of birth)[0m
+
+[1mProperty P570 (date of death)[0m
+[33mFound value "1936-12" in "In 1935, Elsa Einstein was diagnosed with heart and kidney problems; she died in December 1936." (Quality: WRONG_SUBJECT)[0m
+[33mFound value "Princeton Hospital" in "He died in Princeton Hospital early the next morning at the age of 76, having continued to work until near the end." (Quality: WRONG_VALUE_TYPE)[0m
+[33mFound value "1986" in "Margot Einstein permitted the personal letters to be made available to the public, but requested that it not be done until twenty years after her death (she died in 1986)." (Quality: WRONG_SUBJECT)[0m
+
+[1mProperty P22 (father)[0m
+[32mFound value "Q88665 (Hermann Einstein)" in "His parents were Hermann Einstein, a salesman and engineer, and Pauline Koch." (Quality: ACCURATE)[0m
+
+[1mProperty P25 (mother)[0m
+[32mFound value "Q88665 (Hermann Einstein)" in "His parents were Hermann Einstein, a salesman and engineer, and Pauline Koch." (Quality: ACCURATE)[0m
+
+[1mProperty P571 (inception)[0m
+
+[1mProperty P112 (founded by)[0m
+
+[1mProperty P159 (headquarters location)[0m
+
+[1mProperty P452 (industry)[0m
+
+[1mProperty P17 (country)[0m
+
+[1mProperty P36 (capital)[0m
+
+[1mProperty P1619 (date of official opening)[0m
+
+[1mProperty P169 (chief executive officer)[0m
+
+[1mProperty P1454 (legal form)[0m
+
+[1m
+SUMMARY[0m
+15 statements were extracted in total.
+5 of these have quality ACCURATE.
+1 of these have quality WRONG_VALUE_TYPE.
+9 of these have quality WRONG_SUBJECT.

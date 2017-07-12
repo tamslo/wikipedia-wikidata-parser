@@ -1,0 +1,60 @@
+Starting CoreNLP...
+Building property patterns...
+Parsing article...
+Applying property patterns to article...
+[1m
+RESULTS[0m
+[1mProperty P19 (place of birth)[0m
+[32mFound value "Q62 (San Francisco)" in "Jobs was born in San Francisco to parents who had to put him up for adoption at birth; he was raised in the San Francisco Bay Area during the 1960s." (Quality: ACCURATE)[0m
+[33mFound value "1995-08" in "Jobs and Powell had two more children, Erin, born in August 1995, and Eve, born in 1998." (Quality: WRONG_SUBJECT)[0m
+
+[1mProperty P20 (place of death)[0m
+[33mFound value "1973-09" in "When they got to the Neem Karoli ashram, it was almost deserted because Neem Karoli Baba had died in September 1973." (Quality: WRONG_SUBJECT)[0m
+
+[1mProperty P569 (date of birth)[0m
+
+[1mProperty P570 (date of death)[0m
+[32mFound value "2011-10-05" in "Jobs was diagnosed with a pancreatic neuroendocrine tumor in 2003 and died on October 5, 2011, of respiratory arrest related to the tumor." (Quality: ACCURATE)[0m
+[33mFound value "1973-09" in "When they got to the Neem Karoli ashram, it was almost deserted because Neem Karoli Baba had died in September 1973." (Quality: WRONG_SUBJECT)[0m
+[32mFound value "2011" in "When Jobs died in 2011, Schieble was suffering from dementia and living in a nursing home." (Quality: ACCURATE)[0m
+
+[1mProperty P22 (father)[0m
+[33mFound value "Q12605967 (John Abdulfattah Jandali)" in "Steve Jobs's biological father, Abdulfattah "John" Jandali (Arabic: `bd lftH ljndly) (b. 1931), grew up in Homs, Syria and was born into an Arab Muslim household." (Quality: WRONG_SUBJECT)[0m
+[33mFound value "millionaire" in "Jandali is the son of a self-made millionaire who did not go to college and a mother who was a traditional housewife." (Quality: WRONG_SUBJECT)[0m
+[32mFound value "Q28941300 (Paul Jobs)" in "Jobs's adoptive father, Paul Reinhold Jobs (1922-1993), grew up in a Calvinist household, the son of an "alcoholic and sometimes abusive" father." (Quality: ACCURATE)[0m
+[33mFound value "tyrant" in "Jandali has stated that he "was very much in love with Joanne ... but sadly, her father was a tyrant, and forbade her to marry me, as I was from Syria." (Quality: WRONG_VALUE_TYPE)[0m
+[33mFound value "lawyer" in "Neither Jobs nor Fernandez (whose father was a lawyer) came from engineering households and thus decided to enroll in John McCollum's "Electronics 1."" (Quality: WRONG_SUBJECT)[0m
+[32mFound value "Q9200 (Paul)" in "Jobs only contacted Schieble after Clara died and after he received permission from his father, Paul." (Quality: ACCURATE)[0m
+[33mFound value "Lost Father" in "Simpson fictionalized the search for their father in the 1992 novel, The Lost Father." (Quality: WRONG_VALUE_TYPE)[0m
+[32mFound value "Q9200 (Paul)" in "Fifty people, including his father, Paul, and his sister, Mona, attended." (Quality: ACCURATE)[0m
+[32mFound value "Q9200 (Paul)" in "Jobs's father, Paul, died a year and a half later, on March 5, 1993." (Quality: ACCURATE)[0m
+
+[1mProperty P25 (mother)[0m
+[33mFound value "millionaire" in "Jandali is the son of a self-made millionaire who did not go to college and a mother who was a traditional housewife." (Quality: WRONG_SUBJECT)[0m
+[33mFound value "graduate student from Wisconsin" in "As he died soon afterwards, Jobs was given the letter which stated that "his mother had been an unmarried graduate student from Wisconsin named Joanne Schieble."" (Quality: WRONG_SUBJECT)[0m
+[33mFound value "Q1690835 (Joanne Simpson)" in "At the time of his death, his biological mother, Joanne Schieble Simpson, was living in a nursing home and suffering from dementia." (Quality: WRONG_SUBJECT)[0m
+
+[1mProperty P571 (inception)[0m
+
+[1mProperty P112 (founded by)[0m
+
+[1mProperty P159 (headquarters location)[0m
+
+[1mProperty P452 (industry)[0m
+
+[1mProperty P17 (country)[0m
+
+[1mProperty P36 (capital)[0m
+
+[1mProperty P1619 (date of official opening)[0m
+
+[1mProperty P169 (chief executive officer)[0m
+
+[1mProperty P1454 (legal form)[0m
+
+[1m
+SUMMARY[0m
+18 statements were extracted in total.
+9 of these have quality WRONG_SUBJECT.
+2 of these have quality WRONG_VALUE_TYPE.
+7 of these have quality ACCURATE.
