@@ -42,9 +42,15 @@ class CoreNlpClient:
         if http:
             if self._http_client is None:
                 raise Exception('CoreNLP client is not running!')
-            return self._http_client.annotate(text, properties)
+            result = self._http_client.annotate(text, properties)
         else:
-            return self._annotate_cmd(text, properties)
+            result = self._annotate_cmd(text, properties)
+
+        # Raise exceptions thrown by CoreNLP
+        if not isinstance(result, dict):
+            raise Exception(result)
+
+        return result
 
     def _annotate_cmd(self, text, properties):
         with NamedTemporaryFile(mode='w') as text_file:
@@ -59,7 +65,10 @@ class CoreNlpClient:
             # Read results and delete result file afterwards
             result_file_name = os.path.join(self._cwd, os.path.basename(text_file.name) + '.json')
             with open(result_file_name) as result_file:
-                results = json.load(result_file)
+                try:
+                    results = json.load(result_file)
+                except json.decoder.JSONDecodeError:
+                    results = result_file.read()
             os.remove(result_file_name)
 
             return results
