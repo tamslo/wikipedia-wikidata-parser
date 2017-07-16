@@ -50,7 +50,9 @@ class StatementExtractor:
 
     def _validate_match(self, property_info, match, entity_mentions):
         # Check if subject is coreference of entity
-        subject_token = match.named_tokens['subject'][0]
+        if 'subject' not in match.named_tokens:
+            return StatementQuality.WRONG_SUBJECT
+        subject_token = first(match.named_tokens['subject'])
         if not any(subject_token in mention.tokens
                    for mention in entity_mentions):
             return StatementQuality.WRONG_SUBJECT

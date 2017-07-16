@@ -124,7 +124,7 @@ class PropertyProfiler:
     def _compile_pattern(subject_relations, value_node,
                          label_root_relations, label_pattern):
         # Build subpattern matching subject of sentence
-        subject_relation_patterns = ['{} {{}}=subject'.format(relation)
+        subject_relation_patterns = ['?{} {{}}=subject'.format(relation)
                                      for relation in subject_relations]
         subject_pattern = '[{}]'.format('|'.join(subject_relation_patterns))
 

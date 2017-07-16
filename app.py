@@ -29,7 +29,7 @@ class WikipediaWikidataParser:
         self.statement_extractor = StatementExtractor(self.semgrex_matcher, self.wikidata_entity_lookup)
 
         # Generate property profiles
-        print("Building property patterns...")
+        print('Building property patterns...')
         self.property_profiles = self.property_profiler.run(self.wd_properties)
 
     def run(self, title):
@@ -37,7 +37,8 @@ class WikipediaWikidataParser:
         wp_article = self._get_wp_article(title)
 
         # Syntactically parse the entire article
-        print("Parsing article...")
+        print('Parsing article...')
+        wp_article._sanitized_content = 'President and CEO of HPI is Prof. Dr. Christoph Meinel.'
         content_parse_result = self.syntactical_parser.parse(wp_article.sanitized_content, dependency_type='enhanced++')
 
         # Filter out mentions with wrong NER tag
@@ -51,7 +52,7 @@ class WikipediaWikidataParser:
                                or all([token.ner == title_ner for token in mention.tokens])]
 
         # Apply property patterns on text
-        print("Applying property patterns to article...")
+        print('Applying property patterns to article...')
         cprint('\nRESULTS', attrs=['bold'])
         statements = []
         for property_profile in self.property_profiles:
@@ -97,7 +98,7 @@ if __name__ == '__main__':
     verbose = '--verbose' in sys.argv
 
     # Initialize CoreNLP client
-    print("Starting CoreNLP...")
+    print('Starting CoreNLP...')
     core_nlp = CoreNlpClient(core_nlp_dir, verbose=verbose)
     core_nlp.start()
 
