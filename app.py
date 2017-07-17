@@ -38,7 +38,6 @@ class WikipediaWikidataParser:
 
         # Syntactically parse the entire article
         print('Parsing article...')
-        wp_article._sanitized_content = 'President and CEO of HPI is Prof. Dr. Christoph Meinel.'
         content_parse_result = self.syntactical_parser.parse(wp_article.sanitized_content, dependency_type='enhanced++')
 
         # Filter out mentions with wrong NER tag
