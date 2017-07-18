@@ -5,6 +5,7 @@ Applying property patterns to article...
 [1m
 RESULTS[0m
 [1mProperty P19 (place of birth)[0m
+[31mError: Timeout when executing Semgrex query[0m
 [32mFound value "Q62 (San Francisco)" in "Jobs was born in San Francisco to parents who had to put him up for adoption at birth; he was raised in the San Francisco Bay Area during the 1960s." (Quality: ACCURATE)[0m
 [33mFound value "1995-08" in "Jobs and Powell had two more children, Erin, born in August 1995, and Eve, born in 1998." (Quality: WRONG_SUBJECT)[0m
 
@@ -30,8 +31,9 @@ RESULTS[0m
 [32mFound value "Q9200 (Paul)" in "Jobs's father, Paul, died a year and a half later, on March 5, 1993." (Quality: ACCURATE)[0m
 
 [1mProperty P25 (mother)[0m
+[33mFound value "housewife" in "Jandali is the son of a self-made millionaire who did not go to college and a mother who was a traditional housewife." (Quality: WRONG_SUBJECT)[0m
 [33mFound value "millionaire" in "Jandali is the son of a self-made millionaire who did not go to college and a mother who was a traditional housewife." (Quality: WRONG_SUBJECT)[0m
-[33mFound value "graduate student from Wisconsin" in "As he died soon afterwards, Jobs was given the letter which stated that "his mother had been an unmarried graduate student from Wisconsin named Joanne Schieble."" (Quality: WRONG_SUBJECT)[0m
+[33mFound value "graduate student" in "As he died soon afterwards, Jobs was given the letter which stated that "his mother had been an unmarried graduate student from Wisconsin named Joanne Schieble."" (Quality: WRONG_SUBJECT)[0m
 [33mFound value "Q1690835 (Joanne Simpson)" in "At the time of his death, his biological mother, Joanne Schieble Simpson, was living in a nursing home and suffering from dementia." (Quality: WRONG_SUBJECT)[0m
 
 [1mProperty P571 (inception)[0m
@@ -54,7 +56,7 @@ RESULTS[0m
 
 [1m
 SUMMARY[0m
-18 statements were extracted in total.
-9 of these have quality WRONG_SUBJECT.
+19 statements were extracted in total.
 2 of these have quality WRONG_VALUE_TYPE.
+10 of these have quality WRONG_SUBJECT.
 7 of these have quality ACCURATE.

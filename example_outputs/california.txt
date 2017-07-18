@@ -5,6 +5,7 @@ Applying property patterns to article...
 [1m
 RESULTS[0m
 [1mProperty P19 (place of birth)[0m
+[33mFound value "feet" in "Its two sections meet at Yerba Buena Island through the world's largest diameter transportation bore tunnel, at 76 feet (23 m) wide by 58 feet (18 m) high." (Quality: WRONG_SUBJECT)[0m
 
 [1mProperty P20 (place of death)[0m
 
@@ -13,8 +14,10 @@ RESULTS[0m
 [1mProperty P570 (date of death)[0m
 
 [1mProperty P22 (father)[0m
+[33mFound value "Hispanics" in "As of 2011, 75.1% of California's population younger than age 1 were minorities, meaning that they had at least one parent who was not non-Hispanic white (white Hispanics are counted as minorities)." (Quality: WRONG_SUBJECT)[0m
 
 [1mProperty P25 (mother)[0m
+[33mFound value "Hispanics" in "As of 2011, 75.1% of California's population younger than age 1 were minorities, meaning that they had at least one parent who was not non-Hispanic white (white Hispanics are counted as minorities)." (Quality: WRONG_SUBJECT)[0m
 
 [1mProperty P571 (inception)[0m
 
@@ -23,11 +26,17 @@ RESULTS[0m
 [1mProperty P159 (headquarters location)[0m
 
 [1mProperty P452 (industry)[0m
+[33mFound value "Internet" in "It is also regarded as a global trendsetter in both popular culture and politics, and is the origin of the film industry, the hippie counterculture, the Internet, and the personal computer, among others." (Quality: WRONG_SUBJECT)[0m
+[33mFound value "hippie counterculture" in "It is also regarded as a global trendsetter in both popular culture and politics, and is the origin of the film industry, the hippie counterculture, the Internet, and the personal computer, among others." (Quality: WRONG_SUBJECT)[0m
 [33mFound value "trade" in "The five largest sectors of employment in California are trade, transportation, and utilities; government; professional and business services; education and health services; and leisure and hospitality." (Quality: WRONG_SUBJECT)[0m
+[33mFound value "services" in "In output, the five largest sectors are financial services, followed by trade, transportation, and utilities; education and health services; government; and manufacturing." (Quality: WRONG_SUBJECT)[0m
+[33mFound value "Q163820 (Silicon Valley)" in "Many coastal cities include some of the wealthiest per-capita areas in the United States The high-technology sectors in Northern California, specifically Silicon Valley, in Santa Clara and San Mateo counties, have emerged from the economic downturn caused by the dot-com bust." (Quality: WRONG_SUBJECT)[0m
 
 [1mProperty P17 (country)[0m
+[33mFound value "pioneer" in "The state has been a pioneer in road construction." (Quality: WRONG_SUBJECT)[0m
 
 [1mProperty P36 (capital)[0m
+[33mFound value "Q18013 (Sacramento)" in "The state capital is Sacramento." (Quality: WRONG_SUBJECT)[0m
 [33mFound value "Q18013 (Sacramento)" in "The state's capital is Sacramento." (Quality: WRONG_SUBJECT)[0m
 
 [1mProperty P1619 (date of official opening)[0m
@@ -38,5 +47,5 @@ RESULTS[0m
 
 [1m
 SUMMARY[0m
-2 statements were extracted in total.
-2 of these have quality WRONG_SUBJECT.
+11 statements were extracted in total.
+11 of these have quality WRONG_SUBJECT.

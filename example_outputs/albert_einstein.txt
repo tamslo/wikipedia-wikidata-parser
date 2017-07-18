@@ -6,7 +6,7 @@ Applying property patterns to article...
 RESULTS[0m
 [1mProperty P19 (place of birth)[0m
 [31mError: Timeout when executing Semgrex query[0m
-[32mFound value "Q188712 (Empire of Japan)" in "Albert Einstein was born in Ulm, in the Kingdom of Wurttemberg in the German Empire, on 14 March 1879." (Quality: ACCURATE)[0m
+[32mFound value "Q29 (Spain)" in "Albert Einstein was born in Ulm, in the Kingdom of Wurttemberg in the German Empire, on 14 March 1879." (Quality: ACCURATE)[0m
 [32mFound value "Q3012 (Ulm)" in "Albert Einstein was born in Ulm, in the Kingdom of Wurttemberg in the German Empire, on 14 March 1879." (Quality: ACCURATE)[0m
 [33mFound value "Q55630 (Novi Sad)" in "The discovery and publication in 1987 of an early correspondence between Einstein and Maric revealed that they had had a daughter, called "Lieserl" in their letters, born in early 1902 in Novi Sad where Maric was staying with her parents." (Quality: WRONG_SUBJECT)[0m
 [33mFound value "Q70 (Bern)" in "In May 1904, their first son, Hans Albert Einstein, was born in Bern, Switzerland." (Quality: WRONG_SUBJECT)[0m
@@ -53,6 +53,6 @@ RESULTS[0m
 [1m
 SUMMARY[0m
 15 statements were extracted in total.
-5 of these have quality ACCURATE.
 1 of these have quality WRONG_VALUE_TYPE.
+5 of these have quality ACCURATE.
 9 of these have quality WRONG_SUBJECT.

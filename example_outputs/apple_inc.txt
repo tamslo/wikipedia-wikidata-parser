@@ -1,0 +1,50 @@
+Starting CoreNLP...
+Building property patterns...
+Parsing article...
+Applying property patterns to article...
+[1m
+RESULTS[0m
+[1mProperty P19 (place of birth)[0m
+
+[1mProperty P20 (place of death)[0m
+
+[1mProperty P569 (date of birth)[0m
+
+[1mProperty P570 (date of death)[0m
+[33mFound value "2011-10-05" in "On October 5, 2011, Steve Jobs died, marking the end of an era for Apple." (Quality: WRONG_SUBJECT)[0m
+
+[1mProperty P22 (father)[0m
+
+[1mProperty P25 (mother)[0m
+
+[1mProperty P571 (inception)[0m
+[32mFound value "1976-04" in "Apple was founded by Steve Jobs, Steve Wozniak, and Ronald Wayne in April 1976 to develop and sell personal computers." (Quality: ACCURATE)[0m
+
+[1mProperty P112 (founded by)[0m
+[32mFound value "Q19837 (Steve Jobs)" in "Apple was founded by Steve Jobs, Steve Wozniak, and Ronald Wayne in April 1976 to develop and sell personal computers." (Quality: ACCURATE)[0m
+[32mFound value "Q332591 (Ronald Wayne)" in "Apple was founded by Steve Jobs, Steve Wozniak, and Ronald Wayne in April 1976 to develop and sell personal computers." (Quality: ACCURATE)[0m
+[32mFound value "Q483382 (Steve Wozniak)" in "Apple was founded by Steve Jobs, Steve Wozniak, and Ronald Wayne in April 1976 to develop and sell personal computers." (Quality: ACCURATE)[0m
+
+[1mProperty P159 (headquarters location)[0m
+[33mFound value "interest" in "The Information reported in October 2016 that Apple had taken a board seat in Didi Chuxing, a move that James Vincent of The Verge speculated could be a strategic company decision by Apple to get closer to the automobile industry, particularly Didi Chuxing's reported interest in self-driving cars." (Quality: WRONG_SUBJECT)[0m
+[33mFound value "move" in "The Information reported in October 2016 that Apple had taken a board seat in Didi Chuxing, a move that James Vincent of The Verge speculated could be a strategic company decision by Apple to get closer to the automobile industry, particularly Didi Chuxing's reported interest in self-driving cars." (Quality: WRONG_SUBJECT)[0m
+
+[1mProperty P452 (industry)[0m
+
+[1mProperty P17 (country)[0m
+[31mError: Timeout when executing Semgrex query[0m
+
+[1mProperty P36 (capital)[0m
+
+[1mProperty P1619 (date of official opening)[0m
+
+[1mProperty P169 (chief executive officer)[0m
+[33mFound value "Q265852 (Tim Cook)" in "Lisa P. Jackson, Apple's vice president of Environment, Policy and Social Initiatives who reports directly to CEO, Tim Cook, announced that as of March 2016, 93% of Apple's worldwide operations are powered with renewable energy." (Quality: WRONG_SUBJECT)[0m
+
+[1mProperty P1454 (legal form)[0m
+
+[1m
+SUMMARY[0m
+17 statements were extracted in total.
+7 of these have quality ACCURATE.
+10 of these have quality WRONG_SUBJECT.

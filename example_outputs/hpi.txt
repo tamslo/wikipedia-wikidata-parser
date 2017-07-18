@@ -5,7 +5,6 @@ Applying property patterns to article...
 [1m
 RESULTS[0m
 [1mProperty P19 (place of birth)[0m
-[31mError: Timeout when executing Semgrex query[0m
 
 [1mProperty P20 (place of death)[0m
 
@@ -23,7 +22,6 @@ RESULTS[0m
 
 [1mProperty P112 (founded by)[0m
 [32mFound value "Q71074 (Hasso Plattner)" in "It is financed entirely through private funds donated by its founder, Prof. Dr. h.c. Hasso Plattner, who co-founded the largest European software company SAP SE, and is currently the chairman of SAP's supervisory board." (Quality: ACCURATE)[0m
-[32mFound value "Q71074 (Hasso Plattner)" in "It is financed entirely through private funds donated by its founder, Prof. Dr. h.c. Hasso Plattner, who co-founded the largest European software company SAP SE, and is currently the chairman of SAP's supervisory board." (Quality: ACCURATE)[0m
 
 [1mProperty P159 (headquarters location)[0m
 
@@ -36,11 +34,12 @@ RESULTS[0m
 [1mProperty P1619 (date of official opening)[0m
 
 [1mProperty P169 (chief executive officer)[0m
+[33mFound value "Q1085518 (Christoph Meinel)" in "President and CEO of HPI is Prof. Dr. Christoph Meinel." (Quality: WRONG_SUBJECT)[0m
 
 [1mProperty P1454 (legal form)[0m
 
 [1m
 SUMMARY[0m
-4 statements were extracted in total.
-2 of these have quality WRONG_SUBJECT.
+5 statements were extracted in total.
 2 of these have quality ACCURATE.
+3 of these have quality WRONG_SUBJECT.

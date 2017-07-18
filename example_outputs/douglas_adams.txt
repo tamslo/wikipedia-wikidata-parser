@@ -45,6 +45,6 @@ RESULTS[0m
 [1m
 SUMMARY[0m
 8 statements were extracted in total.
-1 of these have quality WRONG_VALUE_TYPE.
 5 of these have quality ACCURATE.
 2 of these have quality WRONG_SUBJECT.
+1 of these have quality WRONG_VALUE_TYPE.
