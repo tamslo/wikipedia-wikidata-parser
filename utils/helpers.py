@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 def first(gen, default_value=None):
     try:
-        return next(gen)
+        return next(iter(gen))
     except StopIteration:
         return default_value
 

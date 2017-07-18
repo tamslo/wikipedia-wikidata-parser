@@ -1,4 +1,4 @@
-from utils.helpers import first
+from itertools import groupby
 
 
 class SemgrexMatcher:
@@ -26,7 +26,17 @@ class SemgrexMatcher:
                    for key, match in result['sentences'][0].items()
                    if key != 'length']
 
+        # Remove duplicates
+        matches = self._remove_duplicates(matches)
+
         return matches
+
+    @staticmethod
+    def _remove_duplicates(matches):
+        key_func = lambda match: match.tokens[0].word
+        for tokens, group in groupby(sorted(matches, key=key_func), key_func):
+            group = list(group)
+            yield max(group, key=lambda match: len(match.named_tokens.keys()))
 
 
 class SemgrexParseException(Exception):

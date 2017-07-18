@@ -42,7 +42,7 @@ class WikipediaWikidataParser:
 
         # Filter out mentions with wrong NER tag
         entity_mentions = content_parse_result.coreferences.mentions_of(wp_article.title)
-        title_parse_result = self.syntactical_parser.parse(wp_article.title, http=True)
+        title_parse_result = self.syntactical_parser.parse(wp_article.title)
         title_ner_tokens = [token.ner for token in title_parse_result.sentences[0].parse_tree.tokens if token.ner]
         if len(set(title_ner_tokens)) == 1:
             title_ner = title_ner_tokens[0]
