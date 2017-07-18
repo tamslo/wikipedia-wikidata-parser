@@ -22,6 +22,7 @@ class PropertyProfiler:
         for prop in properties:
             patterns = [self._build_pattern(prop, label) for label in prop.label_aliases]
             patterns = [pattern for pattern in patterns if pattern is not None]
+            patterns = list(set(patterns))
             profiles.append(PropertyProfile(prop, patterns))
 
         return profiles

@@ -17,11 +17,17 @@ class StatementExtractor:
         self._wikidata_entity_lookup = wikidata_entity_lookup
 
     def run(self, sentence, property_profile, entity_mentions):
-        statements = []
+        # Apply patterns and remove duplicates in matches
+        matches = []
         for pattern in property_profile.patterns:
-            matches = self._apply_pattern(sentence, pattern)
-            statements += [self._build_statement(property_profile.info, match, entity_mentions)
-                           for match in matches]
+            for match in self._apply_pattern(sentence, pattern):
+                if any(x.tokens == match.tokens and x.named_tokens == match.named_tokens for x in matches):
+                    continue
+                matches.append(match)
+
+        # Build statements from unique matches
+        statements = [self._build_statement(property_profile.info, match, entity_mentions)
+                      for match in matches]
 
         return statements
 
